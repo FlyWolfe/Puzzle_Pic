@@ -1,11 +1,11 @@
 /*This source code copyrighted by Lazy Foo' Productions (2004-2015)
 and may not be redistributed without written permission.*/
 
-//Using SDL, SDL_image, standard IO, strings, and file streams
-#include <SDL.h>
-#include <SDL_image.h>
+//Using SDL, SDL_image, standard IO, std::strings, and file streams
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 #include <stdio.h>
-#include <string>
+#include <std::string>
 #include <fstream>
 
 //Screen dimension constants
@@ -50,7 +50,7 @@ class LTexture
 		bool loadFromFile( std::string path );
 
 		#ifdef _SDL_TTF_H
-		//Creates image from font string
+		//Creates image from font std::string
 		bool loadFromRenderedText( std::string textureText, SDL_Color textColor );
 		#endif
 
@@ -140,7 +140,7 @@ class Dot
 		int mVelX, mVelY;
 };
 
-//Starts up SDL and creates window
+//Starts up SDL and creates windows
 bool init();
 
 //Loads media
@@ -158,10 +158,10 @@ bool touchesWall( SDL_Rect box, Tile* tiles[] );
 //Sets tiles from tile map
 bool setTiles( Tile *tiles[] );
 
-//The window we'll be rendering to
-SDL_Window* gWindow = NULL;
+//The windows we'll be rendering to
+SDL_windows* gwindows = NULL;
 
-//The window renderer
+//The windows renderer
 SDL_Renderer* gRenderer = NULL;
 
 //Scene textures
@@ -465,17 +465,17 @@ bool init()
 			printf( "Warning: Linear texture filtering not enabled!" );
 		}
 
-		//Create window
-		gWindow = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
-		if( gWindow == NULL )
+		//Create windows
+		gwindows = SDL_Createwindows( "SDL Tutorial", SDL_windowsPOS_UNDEFINED, SDL_windowsPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_windows_SHOWN );
+		if( gwindows == NULL )
 		{
-			printf( "Window could not be created! SDL Error: %s\n", SDL_GetError() );
+			printf( "windows could not be created! SDL Error: %s\n", SDL_GetError() );
 			success = false;
 		}
 		else
 		{
-			//Create renderer for window
-			gRenderer = SDL_CreateRenderer( gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC );
+			//Create renderer for windows
+			gRenderer = SDL_CreateRenderer( gwindows, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC );
 			if( gRenderer == NULL )
 			{
 				printf( "Renderer could not be created! SDL Error: %s\n", SDL_GetError() );
@@ -545,10 +545,10 @@ void close( Tile* tiles[] )
 	gDotTexture.free();
 	gTileTexture.free();
 
-	//Destroy window
+	//Destroy windows
 	SDL_DestroyRenderer( gRenderer );
-	SDL_DestroyWindow( gWindow );
-	gWindow = NULL;
+	SDL_Destroywindows( gwindows );
+	gwindows = NULL;
 	gRenderer = NULL;
 
 	//Quit SDL subsystems
@@ -760,7 +760,7 @@ bool touchesWall( SDL_Rect box, Tile* tiles[] )
 
 int main( int argc, char* args[] )
 {
-	//Start up SDL and create window
+	//Start up SDL and create windows
 	if( !init() )
 	{
 		printf( "Failed to initialize!\n" );
