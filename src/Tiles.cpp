@@ -1,47 +1,48 @@
 #include "Tiles.h"
 
-#include <iostream>
+/*
+	TILES CLASS FUNCTION DEFINITIONS
+*********************/ 
 
-Tiles::Tiles(Color newColor,Rect newTile){
-	color = Color(newColor);
-	tile = Rect(newTile);
+
+//Empty Constructor 
+Tiles::Tiles(){
+	this->color = WHITE;
 }
 
+
+//Constructor for setting a Tile with a Color and Rectangle
+Tiles::Tiles(SDL_Color newColor,SDL_Rect newTile){
+	this->color = newColor;
+	this->tile = newTile;
+}
+
+/*
 Tiles::~Tiles(){
 	std::cerr << "END OF TILE" << std::endl;
 }
+*/
 
-void Tiles::setColor(Color newColor){
-	color = Color(newColor);
+//Set Color 
+void Tiles::setColor(SDL_Color newColor){
+	//std::cerr << "SET COLOR" << std::endl;
+	this->color = newColor;
 }
 
-Color Tiles::getColor(){
+//Get Color
+SDL_Color Tiles::getColor(){
 	return this->color;
 }
 
-void Tiles::setTile(Rect newTile){
-	tile = Rect(newTile);
+//Set Tile Box
+void Tiles::setTile(SDL_Rect newTile){
+	this->tile = newTile;
 }
 
+//Get Tile Box
 SDL_Rect Tiles::getTile(){
-	SDL_Rect r;
-	r.x=this->tile.x;
-	r.y=this->tile.y;
-	r.w=this->tile.w;
-	r.h=this->tile.h;
-	return r;
+	return this->tile;
 }
 
-/*void Tiles::renderTile(SDL_Renderer* renderer){
-
-	if(!SDL_SetRenderDrawColor(renderer,color.r,color.g,color.b,color.a)){
-		std::cerr << "Drawing Tile Error: " <<  SDL_GetError() << std::endl;
-	}
-
-	if(!SDL_RenderFillRect(renderer,&tile)){
-		std::cerr << "Drawing Tile Error: " <<  SDL_GetError() << std::endl;
-	}
-}
-*/
 
 

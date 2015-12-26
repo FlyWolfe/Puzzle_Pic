@@ -1,44 +1,58 @@
 #include "Player.h"
 
+/*
+	PLAYER CLASS FUNCTION DEFINITIONS
+*********************/ 
 
-
-Player::Player(int w,int h){
+//Constructor of Player CLass
+Player::Player(SDL_Rect newBox){
 	name="DEATH";
-	box=Rect(0,0,w,h);
+	box = newBox;
+	swap=false;
 }
 
-Player::~Player(){
-	std::cerr << "END OF PLAYER" << std::endl;
-}
-
+//Set Player Name
 void Player::setName(std::string newName){
 	name=newName;
 }
+
+//Get Player Name
 std::string Player::getName(){
 	return this->name;
 }
 
-void Player::setBox(Rect newbox){
-	box=Rect(newbox);
+//Set Player Box
+void Player::setBox(SDL_Rect newBox){
+	box=newBox;
 }
+
+//Get Player Box
 SDL_Rect Player::getBox(){
-	SDL_Rect r;
-	r.x=this->box.x;
-	r.y=this->box.y;
-	r.w=this->box.w;
-	r.h=this->box.h;
-	return r;
+	return this->box;
 }
 
+//Set Player Position
+void Player::setPos(int x,int y){
+	this->box.x=x;
+	this->box.y=y;
+}
 
-/*void Player::renderPlayer(SDL_Renderer* renderer){
+//Get the X Position
+int Player::getPosx(){
+	return this->box.x;
+}
 
-	if(!SDL_SetRenderDrawColor(renderer,0,0,0,255)){
-		std::cerr << "Drawing Player Error: " <<  SDL_GetError() << std::endl;
-	}
+//Get the Y Position
+int Player::getPosy(){
+	return this->box.y;
+}
 
-	if(!SDL_RenderDrawRect(renderer,&box)){
-		std::cerr << "Drawing Player Error: " <<  SDL_GetError() << std::endl;
-	}
-}*/
+//Toggle the swap Boolean
+void Player::switchSwap(){
+	this->swap=!this->swap;
+}
 
+//Get Swap Boolean
+bool Player::getSwap(){
+	return this->swap;
+}

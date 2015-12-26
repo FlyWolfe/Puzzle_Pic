@@ -8,11 +8,11 @@ SDL2_IMAGE = SDL2_image
 SDL2_TTF = SDL2_ttf
 
 # Flags that are used regardless of compiliation options go here
-CCFL := -c -g -Wall -std=c++11 `pkg-config --cflags $(SDL2) $(SDL2_IMAGE) $(SDL2_TTF)`
+CCFL := -c -g -Wall `pkg-config --cflags $(SDL2) $(SDL2_IMAGE) $(SDL2_TTF)`
 LDFL := -Wall `pkg-config --libs $(SDL2) $(SDL2_IMAGE) $(SDL2_TTF)`
 
 # List of source files. 
-SRCS := main.cpp
+SRCS := GAMEMAIN.cpp
 
 # Construct file lists
 OBJS := $(addprefix build/obj/,$(patsubst %.cpp,%.o,$(SRCS)))

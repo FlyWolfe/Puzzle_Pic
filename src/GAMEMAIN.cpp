@@ -1,6 +1,12 @@
+#ifdef _WIN32
+#include <SDL.h>
+#include <SDL_image.h>
+#elif defined __unix__ || defined __APPLE__
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include <SDL2/SDL_ttf.h>
+//#include <SDL2/SDL_ttf.h>
+#endif
+
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -9,118 +15,152 @@
 #include <algorithm>
 #include <iterator>
 
+//Classes Used
+
 class Tiles;
 class Display;
 class Game;
 class Player;
 
-SDL_Color BLACK = {0,0,0,255};
-SDL_Color WHITE = {255,255,255,255};
+SDL_Color BLACK = {0,0,0,255};        //Color BLACK
+SDL_Color WHITE = {255,255,255,255};  //Color WHITE
 
-SDL_Rect square = {0,0,10,10};
-
+/*
+	DISPLAY CLASS
+*********************/ 
 class Display{
 
 	private:
-		SDL_Texture* texture;
+		SDL_Texture* texture;			
 		SDL_Renderer* renderer;
 		SDL_Surface* surface;
 		SDL_Window* windows;
 
-		std::vector<SDL_Color> palette;
+		std::vector<SDL_Color> palette; //Colors in the Game
 
-		int width;
-		int height;
+		int width;						//Width of Display Window
+		int height;						//Height of Display Window
 
-		int bwidth;
-		int bheight;
+		int bwidth;						//Width of Tiles
+		int bheight;					//Height of Tiles
 
-		int boardSize;
+		int boardSize;					//Number of a Row if 3X3 the boardsize is 3
 
-		std::vector<std::vector<Tiles> > tiles;
+		std::vector<std::vector<Tiles> > tiles; //Vector of vectors of Tiles
 
 	public:
+		//Contructor
+		Display(std::string name, 				//Name of Window
+				int initialPosX,				//intial X position of teh window
+				int initialPosY,				//intial Y position of teh window
+				int newWidth,					//Width of Window;
+				int newHeight,					//Height of Window;
+				int size						//Size of the Board;
+				); 
 
-		Display(std::string name,int initialPosX,int initialPosY,int newWidth,int newHeight,int size);
+		void initSDL();							//Initialize SDL  
+		//void initTTF();							//Initialize TTF
 
-		void initSDL();
-		void initTTF();
+		void setPalette();						//Create the Colors of the Display
+		std::vector<SDL_Color> getPalette();	//Get the Colors of the Display
+		void printPalette();					//Print the Colors for debbuging purposes
 
-		void setPalette();
-		std::vector<SDL_Color> getPalette();
-		void printPalette();
+		void loadTexture();						//Load Textrues From file
 
-		void loadTexture();
+		void createTexttexture();				//Create Textures from Text using TTF
 
-		void createTexttexture();
+		void createWindow(	std::string name,	//Name of Window
+							int initialPosX,	//Initial X Position of Window
+							int initialPosY,	//Initial Y Position of Window
+							int width,			//Width of Window
+							int height 			//Height of Window
+							);
+		void createRenderer();					//Creates the SDL Renderer 
 
-		void createTexture();
-		void createSurface(std::string filename);
-		void createWindow(std::string name,int initialPosX,int initialPosY,int width,int height);
-		void createRenderer();
+		void textureFromSurface();				//Creates A Texture From A Surface
+		void createRGBSurface();				//Creates a Surface from RGB Masks
+		void surfaceFromImage(					//Creates Surface from Imaeg using SDL_Image
+					std::string filename		//Filename of Image
+					);
 
-		void textureFromSurface();
-		void createRGBSurface();
-		void surfaceFromImage(std::string filename);
+		void setupRenderer();					//Setup the renderer target and scale of Renderer
 
-		void setupRenderer();
+		void makeBoard();						//Make the game board
 
-		void makeBoard();
+		void printBoard();						//Print Game Board in the terminal
 
-		void printBoard();
+		bool checkCollision(int posx,int posy);	//Check the Collision of the Player with the window boundaries
 
-		bool checkCollision(int posx,int posy);
+		void render(SDL_Rect box);				//Render Player and Board
+		void renderPlayer(SDL_Rect box);		//Render The Player
+		void renderTile();						//Render Tiles 
 
-		void render(SDL_Rect box);
-		void renderPlayer(SDL_Rect box);
-		void renderTile();
+		void renderBoard();						//Render the Board
 
-		void renderBoard();
+		void renderPlayerScale(					//Change the Thickness of the Line for the Player
+					SDL_Rect* newBox			//Players Box 
+					);
 
-		void renderPlayerScale(SDL_Rect* newBox);
-
-		void close();
+		void close();							//Close the Display and SDL
 
 
-		int getWidth();
-		int getHeight();
+		int getWidth();							//Get width of Display
+		int getHeight();						//Get height of Display
 
-		int getBwidth();
-		int getBheight();
+		int getBwidth();						//Get tile width  
+		int getBheight();						//Get tile height
 
-		int getBoardSize();
+		int getBoardSize();						//Get board size
 
-		void swapColors(int x1,int y1,int x2,int y2);
+		void swapColors(						//Swap Tile Colors
+					int x1,int y1,				//The x and y position of tile one
+					int x2,int y2				//The x and y position of tile two
+					);
 
-		Tiles* getTileFromTiles(int i,int j);
+		Tiles* getTileFromTiles(int i,int j);	//Get the pointer a tile in the Board
 
 };
+
+/*
+	TILES CLASS
+*********************/ 
 
 class Tiles{
 
 	private:
-		SDL_Color color;
-		SDL_Rect tile; 
+		SDL_Color color;					//Color of a Tile
+		SDL_Rect tile; 						//Rectange Box of a Tile
 
 	public:
-		Tiles();
-		Tiles(SDL_Color newColor, SDL_Rect newTile);
+		Tiles();							//Empty Constructor of a Tile
+		Tiles(								//Constructor of a Tile from a Color and Rectangle
+				SDL_Color newColor, 		//Color using SDL_Color
+				SDL_Rect newTile			//Rectangle Box using SDL_Rect
+				);
 		//~Tiles();
 
-		void setColor(SDL_Color newColor);
-		SDL_Color getColor();
+		void setColor(SDL_Color newColor);	//Set the Color of a Tile
+		SDL_Color getColor();				//Get the Color of a Tile
 
-		void setTile(SDL_Rect newTile);
-		SDL_Rect getTile();
+		void setTile(SDL_Rect newTile);		//Set the Rectangle Box of a Tile 
+		SDL_Rect getTile();					//Get the Rectangle Box of a Tile
 
 		//void renderTile(SDL_Renderer renderer);
 
 };
 
+/*
+	TILES CLASS FUNCTION DEFINITIONS
+*********************/ 
+
+
+//Empty Constructor 
 Tiles::Tiles(){
 	this->color = WHITE;
 }
 
+
+//Constructor for setting a Tile with a Color and Rectangle
 Tiles::Tiles(SDL_Color newColor,SDL_Rect newTile){
 	this->color = newColor;
 	this->tile = newTile;
@@ -131,48 +171,59 @@ Tiles::~Tiles(){
 	std::cerr << "END OF TILE" << std::endl;
 }
 */
+
+//Set Color 
 void Tiles::setColor(SDL_Color newColor){
-	std::cerr << "SET COLOR" << std::endl;
+	//std::cerr << "SET COLOR" << std::endl;
 	this->color = newColor;
 }
 
+//Get Color
 SDL_Color Tiles::getColor(){
 	return this->color;
 }
 
+//Set Tile Box
 void Tiles::setTile(SDL_Rect newTile){
 	this->tile = newTile;
 }
 
+//Get Tile Box
 SDL_Rect Tiles::getTile(){
 	return this->tile;
 }
 
+/*
+	DISPLAY CLASS FUNCTION DEFINITIONS
+*********************/ 
+
+//Used to generate Random Number
 std::random_device seeder;
 std::mt19937 engine(seeder());
 
-
+//Constructor of Display Class 
 Display::Display(std::string name,int initialPosX,int initialPosY,int newWidth,int newHeight,int size):
-	width(newWidth), height(newHeight),boardSize(size), bwidth(width/size), bheight(height/size){
-	initSDL();
-	initTTF();
+	width(newWidth), height(newHeight),boardSize(size), bwidth(width/size), bheight(height/size){ //Integer Constructors
+	initSDL();													//Initialize SDL for Display
+	initTTF();													//Initialize TTF for Fonts and Displaying Words
 
-	createWindow(name,initialPosX,initialPosY,width,height);
-	createRenderer();
-	setupRenderer();
+	createWindow(name,initialPosX,initialPosY,width,height);	//Create Windows
+	createRenderer();											//Create Renderer
+	setupRenderer();											//Setup Renderer
 
-	createRGBSurface();
-	textureFromSurface();
+	createRGBSurface();											//Create Surface from RGB pixel Encoding
+	textureFromSurface();										//Create Texture from Surface
 	
 
-	setPalette();
+	setPalette();												//Set the Palette of the Game Board
 
-	makeBoard();
+	makeBoard();												//Make Game Board
 
-	printBoard();
+	printBoard();												//Print Board for Debugging Purposes
 }
 
 
+//Initialize SDL for Display
 void Display::initSDL(){
 	if(SDL_Init(SDL_INIT_EVERYTHING) !=0 ) {
         std::cerr << "SDL_Init Error: " << SDL_GetError() << std::endl;
@@ -182,15 +233,17 @@ void Display::initSDL(){
     //return true;
 }
 
-void Display::initTTF(){
+//Initialize TTF for Fonts and Displaying Words
+/*void Display::initTTF(){
 	if(TTF_Init() !=0){
         std::cerr << "TTF_Init Error: " << TTF_GetError() << std::endl;
         exit(1);
         //return false;
     }
     //return true;
-}
+}*/
 
+//Set the Palette of the Game Board
 void Display::setPalette(){
 
 	SDL_Color colors[] = {
@@ -211,6 +264,7 @@ void Display::setPalette(){
 
 }
 
+//Print the Colors for debbuging purposes
 void Display::printPalette(){
 	std::cerr << "PRINT PALETTE" << std::endl;
 	for(int i=0;i<palette.size();i++){
@@ -218,19 +272,22 @@ void Display::printPalette(){
 	}
 }
 
+//Get Palette of a Display
 std::vector<SDL_Color> Display::getPalette(){
 	return this->palette;
 }
 
-
+//Create Texture
 void Display::createTexture(){
-	
+	std::cerr << "NOT IMPLEMENTED" << std::endl;
 }
 
+//Load Texture From Image
 void Display::loadTexture(){
-
+	std::cerr << "NOT IMPLEMENTED" << std::endl;
 }
 
+//Create a Texture from a Surface
 void Display::textureFromSurface(){
 	texture=SDL_CreateTextureFromSurface(renderer,surface);
 	if(!texture){
@@ -243,36 +300,13 @@ void Display::textureFromSurface(){
 
 }
 
+
+//Create a Texture of Text
 void Display::createTexttexture(){
 
 }
 
-void Display::createSurface(std::string filename){
-	if(filename.empty()){
-		Uint32 rmask, gmask, bmask, amask;
-		#if SDL_BYTEORDER == SDL_BIG_ENDIAN
-    	rmask = 0xff000000;
-    	gmask = 0x00ff0000;
-    	bmask = 0x0000ff00;
-    	amask = 0x000000ff;
-		#else
-    	rmask = 0x000000ff;
-    	gmask = 0x0000ff00;
-    	bmask = 0x00ff0000;
-    	amask = 0xff000000;
-		#endif
-		surface=SDL_CreateRGBSurface(0,width,height,32,rmask, gmask, bmask, amask);
-	}else{
-		surface=IMG_Load(filename.c_str());
-	}
-	if(!surface){
-        std::cerr << "Create Surface Error: " << SDL_GetError() << std::endl;
-        exit(1);
-        //return false;
-    }
-    //return true;
-}
-
+//Create a Surface using RGB pixel Encoding
 void Display::createRGBSurface(){
 	Uint32 rmask, gmask, bmask, amask;
 	#if SDL_BYTEORDER == SDL_BIG_ENDIAN
@@ -294,6 +328,7 @@ void Display::createRGBSurface(){
     }
 }
 
+//Create a Surface from a Image
 void Display::surfaceFromImage(std::string filename){
 	surface=IMG_Load(filename.c_str());
 	if(!surface){
@@ -305,7 +340,7 @@ void Display::surfaceFromImage(std::string filename){
 }
 
 
-
+//Create a Window
 void Display::createWindow(std::string name,int initialPosX,int initialPosY,int width,int height){
 
 	// Create an application windows with the following settings:
@@ -326,6 +361,7 @@ void Display::createWindow(std::string name,int initialPosX,int initialPosY,int 
 
 }
 
+//Create a Renderer
 void Display::createRenderer(){
 
 	renderer = SDL_CreateRenderer(
@@ -342,6 +378,7 @@ void Display::createRenderer(){
     //return true;
 }
 
+//Setup a Renderer
 void Display::setupRenderer(){
 
 	// Set size of renderer to the same as windows
@@ -351,6 +388,8 @@ void Display::setupRenderer(){
 	SDL_SetRenderDrawColor(this->renderer, 0, 0, 0, 255 );
 }
 
+
+//Check Collision of the Player and Window 
 bool Display::checkCollision(int posx,int posy){
 
 	if( (posx < 0) || (posx+bwidth > width) ){
@@ -366,6 +405,7 @@ bool Display::checkCollision(int posx,int posy){
 	return false;
 }
 
+//Make Board
 void Display::makeBoard(){
 	std::uniform_int_distribution<int> dist(0,palette.size()-1);
 	int num;
@@ -389,6 +429,7 @@ void Display::makeBoard(){
 	}
 }
 
+//Print a Board
 void Display::printBoard(){
 	std::cerr << "PRINT BOARD" << std::endl;
 	for(int i=0;i<boardSize;i++){
@@ -402,6 +443,7 @@ void Display::printBoard(){
 	//printPalette();
 }
 
+//Render Board
 void Display::renderBoard(){
 	for(int i=0;i<boardSize;i++){
 		for(int j=0;j<boardSize;j++){
@@ -416,17 +458,19 @@ void Display::renderBoard(){
 	}
 } 
 
-void Display::renderTile(){
+//Render a Tile
+void Display::renderTile(int i,int j){
 
-	if(!SDL_SetRenderDrawColor(renderer,0,0,0,255)){
-		std::cerr << "Drawing Tile Error: " <<  SDL_GetError() << std::endl;
+	if(SDL_SetRenderDrawColor(this->renderer,tiles[i][j].getColor().r,tiles[i][j].getColor().g,tiles[i][j].getColor().b,tiles[i][j].getColor().a) != 0){
+		std::cerr << "Drawing Color Tile Error: " <<  SDL_GetError() << std::endl;
 	}
-	SDL_Rect r = {0,0,width,height};
-	if(!SDL_RenderFillRect(renderer,&r)){
-		std::cerr << "Drawing Tile Error: " <<  SDL_GetError() << std::endl;
+	SDL_Rect r = tiles[i][j].getTile();
+	if(SDL_RenderFillRect(this->renderer,&r) != 0 ){
+		std::cerr << "Drawing Fill Tile Error: " <<  SDL_GetError() << std::endl;
 	}
 }
 
+//Change Line thickness of Player
 void Display::renderPlayerScale(SDL_Rect* newBox){
 	newBox->x/=boardSize;
 	newBox->y/=boardSize;
@@ -434,6 +478,7 @@ void Display::renderPlayerScale(SDL_Rect* newBox){
 	newBox->h/=boardSize;
 }
 
+//Render Player
 void Display::renderPlayer(SDL_Rect box){
 
 	//std::cerr << "Player: " << " x: " << box.x << " y: " << box.y << " w: " << box.w << " h: " << box.h << std::endl;
@@ -459,6 +504,7 @@ void Display::renderPlayer(SDL_Rect box){
 	}
 }
 
+//Render all Objects
 void Display::render(SDL_Rect box){
 	std::cerr << "RENDER" << std::endl;
 	// Change color to black
@@ -476,6 +522,7 @@ void Display::render(SDL_Rect box){
 	SDL_RenderPresent(renderer);
 }
 
+//Close Display
 void Display::close(){
 
 	SDL_DestroyTexture(texture);
@@ -485,24 +532,32 @@ void Display::close(){
 
 }
 
+//Get Width of Display
 int Display::getWidth(){
 	return this->width;
 }
+
+//Get Heigth of Display
 int Display::getHeight(){
 	return this->height;
 }
 
+//Get Width of Tiles
 int Display::getBwidth(){
 	return this->bwidth;
 }
+
+//Get Height of Tiles
 int Display::getBheight(){
 	return this->bheight;
 }
 
+//Get board Size if 3X3 board size is 3
 int Display::getBoardSize(){
 	return this->boardSize;
 }
 
+//Swap Colors of Two Tiles
 void Display::swapColors(int x1,int y1,int x2,int y2){
 	//std::cerr << "SWAP COLORS : " << " x1: " << x1 << " y1: " << y1 << " x2: " << x2 << " y2: " << y2 << std::endl;
 	//std::cerr <<"BEFORE: " << std::endl;
@@ -515,79 +570,113 @@ void Display::swapColors(int x1,int y1,int x2,int y2){
 	//std::cerr <<"DONE SWAP COLORS: " << std::endl;
 }
 
+//Get Pointer to a tile on a board
 Tiles* Display::getTileFromTiles(int i,int j){
 	return &this->tiles[i][j];
 }
 
+/*
+	PLAYER CLASS
+*********************/ 
+
 class Player{
 	private:
-		std::string name;
-		SDL_Rect box;
-		bool swap;
+		std::string name;			//Name Of Player
+		SDL_Rect box;				//Box of Player
+		bool swap;					//Bool fo knowing When to Swap tiles
 
 	public:
-		Player();
-		Player(SDL_Rect newBox);
+		Player();					//Empty Constructor
+		Player(SDL_Rect newBox);	//Constructor Player from SDL_Rect box
 
-		void setName(std::string newName);
-		std::string getName();
+		void setName(				//Set Name of Player
+				std::string newName	//Name of Player
+				);
+		std::string getName();		//Get Name of Player
 
-		void setBox(SDL_Rect newBox);
-		SDL_Rect getBox();
+		void setBox(				//Set Box of the Player
+				SDL_Rect newBox		//Box of the Player
+				);
+		SDL_Rect getBox();			//Get Box of the Player
 
-		void setPos(int x,int y);
+		void setPos(int x,int y);	//Set Position of the Player
 
-		int getPosx();
-		int getPosy();
+		int getPosx();				//Get X Position of the Player
+		int getPosy();				//Get Y Position of the Player
 
-		void switchSwap();
-		bool getSwap();
+		void switchSwap();			//Toggle the Boolean for swapping Tiles
+		bool getSwap();				//Get Swap Boolean
 
 		//void renderPlayer(SDL_Renderer renderer);
 };
 
+/*
+	PLAYER CLASS FUNCTION DEFINITIONS
+*********************/ 
+
+//Constructor of Player CLass
 Player::Player(SDL_Rect newBox){
 	name="DEATH";
 	box = newBox;
 	swap=false;
 }
 
+//Set Player Name
 void Player::setName(std::string newName){
 	name=newName;
 }
+
+//Get Player Name
 std::string Player::getName(){
 	return this->name;
 }
 
+//Set Player Box
 void Player::setBox(SDL_Rect newBox){
 	box=newBox;
 }
+
+//Get Player Box
 SDL_Rect Player::getBox(){
 	return this->box;
 }
 
+//Set Player Position
 void Player::setPos(int x,int y){
 	this->box.x=x;
 	this->box.y=y;
 }
 
+//Get the X Position
 int Player::getPosx(){
 	return this->box.x;
 }
+
+//Get the Y Position
 int Player::getPosy(){
 	return this->box.y;
 }
 
+//Toggle the swap Boolean
 void Player::switchSwap(){
 	this->swap=!this->swap;
 }
+
+//Get Swap Boolean
 bool Player::getSwap(){
 	return this->swap;
 }
 
+/*
+	MAIN FUNCTION
+*********************/ 
+
 int main(int argc, char const *argv[]){
 	Display display = Display("Puzzle Pic",0,0,400,400,2);
     //Game game = new Game();
+
+    std::cerr << std::endl << std::endl;
+    std::cerr << "ARROW KEYS TO MOVE. SPACE TO TOGGLE SWAPPING COLOR OF TILES"
 
     display.printBoard();
     SDL_Rect r = {0,0,display.getBwidth(),display.getBheight()};
@@ -597,18 +686,18 @@ int main(int argc, char const *argv[]){
     while(true){
     	while(SDL_PollEvent(&e)!=0){
             switch( e.type ){
-                case SDL_QUIT:
+                case SDL_QUIT://Close Display
                     display.close();
                 	return 0;
                 break;
                 case SDL_KEYDOWN:
                     switch( e.key.keysym.sym ){
-                        case SDLK_ESCAPE:
+                        case SDLK_ESCAPE://Close Display
                         case SDLK_DELETE:
                             display.close();
                             return 0;
                         break;
-                        case SDLK_UP:
+                        case SDLK_UP://Move Player Up
                             std::cerr << "KEY UP" << std::endl;
                           	player.setPos(player.getPosx(),player.getPosy()-display.getBheight());
                        		if(display.checkCollision(player.getPosx(),player.getPosy())){
@@ -617,13 +706,14 @@ int main(int argc, char const *argv[]){
                        			//std::cerr << "SWAP COLORS : " << " x1: " << player.getPosx()/display.getBwidth() << " y1: " << player.getPosy()/display.getBheight() << " x2: " << player.getPosx()/display.getBwidth() << " y2: " << (player.getPosy()+display.getBheight())/display.getBheight() << std::endl;
                        			display.swapColors(player.getPosx()/display.getBwidth(),player.getPosy()/display.getBheight(),player.getPosx()/display.getBwidth(),(player.getPosy()+display.getBheight())/display.getBheight());
                        			player.switchSwap();
-                       			display.printBoard();
+                       			std::cerr << "MOVE TO SWAP WITH THAT COLOR" << std::endl;
+                       			//display.printBoard();
                        			
                        		}
                        		//display.getTileFromTiles(0,0)->setColor(BLACK);
                        		display.render(player.getBox());
 	                    break;
-                        case SDLK_DOWN:
+                        case SDLK_DOWN: //Move Player Down
                           	std::cerr << "KEY DOWN" << std::endl;
                         	player.setPos(player.getPosx(),player.getPosy()+display.getBheight());
                        		if(display.checkCollision(player.getPosx(),player.getPosy())){
@@ -632,12 +722,13 @@ int main(int argc, char const *argv[]){
                             	//std::cerr << "SWAP COLORS : " << " x1: " << player.getPosx()/display.getBwidth() << " y1: " << player.getPosy()/display.getBheight() << " x2: " << player.getPosx()/display.getBwidth() << " y2: " << (player.getPosy()-display.getBheight())/display.getBheight() << std::endl;
                             	display.swapColors(player.getPosx()/display.getBwidth(),player.getPosy()/display.getBheight(),player.getPosx()/display.getBwidth(),(player.getPosy()-display.getBheight())/display.getBheight());
                             	player.switchSwap();
-                            	display.printBoard();
+                            	std::cerr << "MOVE TO SWAP WITH THAT COLOR" << std::endl;
+                            	//display.printBoard();
                             }
                             //display.getTileFromTiles(0,0)->setColor(BLACK);
                             display.render(player.getBox());
                         break;
-                        case SDLK_LEFT:
+                        case SDLK_LEFT://Move Player Left
                             std::cerr << "KEY LEFT" << std::endl;
                             player.setPos(player.getPosx()-display.getBwidth(),player.getPosy());
                             if(display.checkCollision(player.getPosx(),player.getPosy())){
@@ -646,12 +737,13 @@ int main(int argc, char const *argv[]){
                             	//std::cerr << "SWAP COLORS : " << " x1: " << player.getPosx()/display.getBwidth() << " y1: " << player.getPosy()/display.getBheight() << " x2: " << (player.getPosx()+display.getBwidth())/display.getBwidth() << " y2: " << (player.getPosy())/display.getBheight() << std::endl;
                             	display.swapColors(player.getPosx()/display.getBwidth(),player.getPosy()/display.getBheight(),(player.getPosx()+display.getBwidth())/display.getBwidth(),(player.getPosy())/display.getBheight());
                             	player.switchSwap();
-                            	display.printBoard();
+                            	std::cerr << "MOVE TO SWAP WITH THAT COLOR" << std::endl;
+                            	//display.printBoard();
                             }
                             //display.getTileFromTiles(0,0)->setColor(BLACK);
                             display.render(player.getBox());
                         break;
-                        case SDLK_RIGHT:
+                        case SDLK_RIGHT: //Move Player Right
                             std::cerr << "KEY RIGHT" << std::endl;
                             player.setPos(player.getPosx()+display.getBwidth(),player.getPosy());
                             if(display.checkCollision(player.getPosx(),player.getPosy())){
@@ -660,17 +752,18 @@ int main(int argc, char const *argv[]){
                            		//std::cerr << "SWAP COLORS : " << " x1: " << player.getPosx()/display.getBwidth() << " y1: " << player.getPosy()/display.getBheight() << " x2: " << (player.getPosx()-display.getBwidth())/display.getBwidth() << " y2: " << (player.getPosy())/display.getBheight() << std::endl;
                             	display.swapColors(player.getPosx()/display.getBwidth(),player.getPosy()/display.getBheight(),(player.getPosx()-display.getBwidth())/display.getBwidth(),(player.getPosy())/display.getBheight());
                             	player.switchSwap();
-                            	display.printBoard();
+                            	std::cerr << "MOVE TO SWAP WITH THAT COLOR" << std::endl;
+                            	//display.printBoard();
                             }
                             //display.getTileFromTiles(0,0)->setColor(BLACK);
                             display.render(player.getBox());
                         break;
-                        case SDLK_SPACE:
+                        case SDLK_SPACE://Toggle Swap
                           	//std::cerr << "SPACE PRESSED: " << "PLayer swap: " << player.getSwap() << std::endl;
                            	player.switchSwap();
                            	//std::cerr << "SPACE PRESSED: " << "PLayer swap: " << player.getSwap() << std::endl;
                         break;
-                        case SDLK_p:
+                        case SDLK_p:   //Print Board For Debugging Purposes
                           	display.printBoard();
                         break;
                         default:
