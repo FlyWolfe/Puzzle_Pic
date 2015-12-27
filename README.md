@@ -1,4 +1,3 @@
 # Puzzle_Pic
-C++ Game with Alex Macri
 
-Using C++ with SDL
+Using C++ with SDL2, SDL2 Image, and SDL2 TTF
