@@ -12,7 +12,7 @@ std::mt19937 engine(seeder());
 Display::Display(std::string name,int initialPosX,int initialPosY,int newWidth,int newHeight,int size):
 	width(newWidth), height(newHeight),boardSize(size), bwidth(width/size), bheight(height/size){ //Integer Constructors
 	initSDL();													//Initialize SDL for Display
-	initTTF();													//Initialize TTF for Fonts and Displaying Words
+	//initTTF();													//Initialize TTF for Fonts and Displaying Words
 
 	createWindow(name,initialPosX,initialPosY,width,height);	//Create Windows
 	createRenderer();											//Create Renderer
@@ -41,14 +41,14 @@ void Display::initSDL(){
 }
 
 //Initialize TTF for Fonts and Displaying Words
-void Display::initTTF(){
+/*void Display::initTTF(){
 	if(TTF_Init() !=0){
         std::cerr << "TTF_Init Error: " << TTF_GetError() << std::endl;
         exit(1);
         //return false;
     }
     //return true;
-}
+}*/
 
 //Set the Palette of the Game Board
 void Display::setPalette(){
@@ -236,7 +236,7 @@ void Display::printBoard(){
 	std::cerr << "PRINT BOARD" << std::endl;
 	for(int i=0;i<boardSize;i++){
 		std::cerr << "Tiles: " << "size: " << tiles[i].size() << std::endl;
-		for(int j=0,h=0;j<boardSize;j++){
+		for(int j=0;j<boardSize;j++){
 			std::cerr << "Tile Created :" << "i: " << i << " j: " << j << std::endl; 
 			std::cerr << "Tile Position :" << "x: " << tiles[i][j].getTile().x << " y: " << tiles[i][j].getTile().y << " w: " << tiles[i][j].getTile().w << " h: " << tiles[i][j].getTile().h << std::endl; 
 			std::cerr << "Tile Color :" << " r: " << (int)tiles[i][j].getColor().r << " g: " << (int)tiles[i][j].getColor().g << " b: " << (int)tiles[i][j].getColor().b << " a: " << (int)tiles[i][j].getColor().a << std::endl;
@@ -263,10 +263,10 @@ void Display::renderBoard(){
 //Render a Tile
 void Display::renderTile(int x,int y){
 
-	if(SDL_SetRenderDrawColor(this->renderer,tiles[i][j].getColor().r,tiles[i][j].getColor().g,tiles[i][j].getColor().b,tiles[i][j].getColor().a) != 0){
+	if(SDL_SetRenderDrawColor(this->renderer,tiles[x][y].getColor().r,tiles[x][y].getColor().g,tiles[x][y].getColor().b,tiles[x][y].getColor().a) != 0){
 		std::cerr << "Drawing Color Tile Error: " <<  SDL_GetError() << std::endl;
 	}
-	SDL_Rect r = tiles[i][j].getTile();
+	SDL_Rect r = tiles[x][y].getTile();
 	if(SDL_RenderFillRect(this->renderer,&r) != 0 ){
 		std::cerr << "Drawing Fill Tile Error: " <<  SDL_GetError() << std::endl;
 	}

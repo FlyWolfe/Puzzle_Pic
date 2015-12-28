@@ -1,5 +1,7 @@
 #include "Player.h"
 
+#include <iostream>
+
 /*
 	PLAYER CLASS FUNCTION DEFINITIONS
 *********************/ 

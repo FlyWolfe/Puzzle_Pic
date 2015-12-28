@@ -8,11 +8,13 @@ SDL2_IMAGE = SDL2_image
 SDL2_TTF = SDL2_ttf
 
 # Flags that are used regardless of compiliation options go here
-CCFL := -c -g -Wall `pkg-config --cflags $(SDL2) $(SDL2_IMAGE) $(SDL2_TTF)`
-LDFL := -Wall `pkg-config --libs $(SDL2) $(SDL2_IMAGE) $(SDL2_TTF)`
+CCFL := -c -g -Wall `pkg-config --cflags $(SDL2) $(SDL2_IMAGE) `
+LDFL := -Wall `pkg-config --libs $(SDL2) $(SDL2_IMAGE) `
 
 # List of source files. 
 SRCS := GAMEMAIN.cpp
+
+#SRCS := Tiles.cpp Player.cpp Display.cpp Test.cpp 
 
 # Construct file lists
 OBJS := $(addprefix build/obj/,$(patsubst %.cpp,%.o,$(SRCS)))

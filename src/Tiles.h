@@ -1,32 +1,34 @@
 #ifndef _TILES_H_
 #define _TILES_H_
 
+#include <SDL2/SDL.h>
+#include "Util.h"
 
 /*
 	TILES CLASS
 *********************/ 
 
-class Tiles{
+class TILES{
 
 	private:
-		SDL_Color color;					//Color of a Tile
-		SDL_Rect tile; 						//Rectange Box of a Tile
+		SDL_Color color;					//Color of a box
+		SDL_Rect box; 						//Rectange Box of a box
 
 	public:
-		Tiles();							//Empty Constructor of a Tile
-		Tiles(								//Constructor of a Tile from a Color and Rectangle
+		TILES();							//Empty Constructor of a box
+		TILES(								//Constructor of a box from a Color and Rectangle
 				SDL_Color newColor, 		//Color using SDL_Color
-				SDL_Rect newTile			//Rectangle Box using SDL_Rect
+				SDL_Rect newBox			//Rectangle Box using SDL_Rect
 				);
-		//~Tiles();
+		//~TILES();
 
-		void setColor(SDL_Color newColor);	//Set the Color of a Tile
-		SDL_Color getColor();				//Get the Color of a Tile
+		void setColor(SDL_Color newColor);	//Set the Color of a box
+		SDL_Color getColor();				//Get the Color of a box
 
-		void setTile(SDL_Rect newTile);		//Set the Rectangle Box of a Tile 
-		SDL_Rect getTile();					//Get the Rectangle Box of a Tile
+		void setbox(SDL_Rect newBox);		//Set the Rectangle Box of a box 
+		SDL_Rect getbox();					//Get the Rectangle Box of a box
 
-		//void renderTile(SDL_Renderer renderer);
+		//void renderbox(SDL_Renderer renderer);
 
 };
 
