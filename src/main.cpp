@@ -2,10 +2,16 @@
 and may not be redistributed without written permission.*/
 
 //Using SDL, SDL_image, standard IO, std::strings, and file streams
+#ifdef _WIN32
+#include <SDL.h>
+#include <SDL_image.h>
+#elif defined __unix__ || defined __APPLE__
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+//#include <SDL2/SDL_ttf.h>
+#endif
 #include <stdio.h>
-#include <std::string>
+#include <string>
 #include <fstream>
 
 //Screen dimension constants
@@ -159,7 +165,7 @@ bool touchesWall( SDL_Rect box, Tile* tiles[] );
 bool setTiles( Tile *tiles[] );
 
 //The windows we'll be rendering to
-SDL_windows* gwindows = NULL;
+SDL_Window* gwindows = NULL;
 
 //The windows renderer
 SDL_Renderer* gRenderer = NULL;
@@ -466,7 +472,7 @@ bool init()
 		}
 
 		//Create windows
-		gwindows = SDL_Createwindows( "SDL Tutorial", SDL_windowsPOS_UNDEFINED, SDL_windowsPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_windows_SHOWN );
+		gwindows = SDL_Createwindows( "SDL Tutorial", SDL_WindowPOS_UNDEFINED, SDL_WindowPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_Window_SHOWN );
 		if( gwindows == NULL )
 		{
 			printf( "windows could not be created! SDL Error: %s\n", SDL_GetError() );

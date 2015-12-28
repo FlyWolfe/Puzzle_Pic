@@ -77,7 +77,7 @@ class Display{
 
 		void render(SDL_Rect box);				//Render Player and Board
 		void renderPlayer(SDL_Rect box);		//Render The Player
-		void renderTile();						//Render Tiles 
+		void renderTile(int x,int y);						//Render Tiles 
 
 		void renderBoard();						//Render the Board
 

@@ -84,11 +84,6 @@ std::vector<SDL_Color> Display::getPalette(){
 	return this->palette;
 }
 
-//Create Texture
-void Display::createTexture(){
-	std::cerr << "NOT IMPLEMENTED" << std::endl;
-}
-
 //Load Texture From Image
 void Display::loadTexture(){
 	std::cerr << "NOT IMPLEMENTED" << std::endl;
@@ -266,7 +261,7 @@ void Display::renderBoard(){
 } 
 
 //Render a Tile
-void Display::renderTile(int i,int j){
+void Display::renderTile(int x,int y){
 
 	if(SDL_SetRenderDrawColor(this->renderer,tiles[i][j].getColor().r,tiles[i][j].getColor().g,tiles[i][j].getColor().b,tiles[i][j].getColor().a) != 0){
 		std::cerr << "Drawing Color Tile Error: " <<  SDL_GetError() << std::endl;

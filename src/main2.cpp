@@ -6,7 +6,7 @@ int posY = 200;
 int sizeX = 300;
 int sizeY = 400;
 
-SDL_windows* windows;
+SDL_Window* windows;
 SDL_Renderer* renderer;
 
 bool InitEverything();

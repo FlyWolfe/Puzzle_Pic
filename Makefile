@@ -2,7 +2,7 @@
 
 SHELL  = bash
 TARGET = PuzzlePic
-CC     = clang
+CC     = g++
 SDL2 = sdl2
 SDL2_IMAGE = SDL2_image
 SDL2_TTF = SDL2_ttf
