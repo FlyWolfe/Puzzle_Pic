@@ -1,46 +1,46 @@
 #include "Tiles.h"
 
 /*
-	TILES CLASS FUNCTION DEFINITIONS
-*********************/ 
+	Tiles CLASS FUNCTION DEFINITIONS
+*********************/
 
 
-//Empty Constructor 
-TILES::TILES(){
+//Empty Constructor
+Tiles::Tiles(){
 	this->color = WHITE;
 }
 
 
 //Constructor for setting a box with a Color and Rectangle
-TILES::TILES(SDL_Color newColor,SDL_Rect newBox){
+Tiles::Tiles(SDL_Color newColor,SDL_Rect newBox){
 	this->color = newColor;
 	this->box = newBox;
 }
 
 /*
-TILES::~TILES(){
+Tiles::~Tiles(){
 	std::cerr << "END OF box" << std::endl;
 }
 */
 
-//Set Color 
-void TILES::setColor(SDL_Color newColor){
+//Set Color
+void Tiles::setColor(SDL_Color newColor){
 	//std::cerr << "SET COLOR" << std::endl;
 	this->color = newColor;
 }
 
 //Get Color
-SDL_Color TILES::getColor(){
+SDL_Color Tiles::getColor(){
 	return this->color;
 }
 
 //Set box Box
-void TILES::setbox(SDL_Rect newBox){
+void Tiles::setbox(SDL_Rect newBox){
 	this->box = newBox;
 }
 
 //Get box Box
-SDL_Rect TILES::getbox(){
+SDL_Rect Tiles::getbox(){
 	return this->box;
 }
 

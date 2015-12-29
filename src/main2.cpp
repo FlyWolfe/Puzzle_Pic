@@ -1,4 +1,4 @@
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include <iostream>
 
 int posX = 100;
@@ -22,7 +22,7 @@ SDL_Rect playerPos;
 
 int main( int argc, char* args[] )
 {
-	if ( !InitEverything() ) 
+	if ( !InitEverything() )
 		return -1;
 
 
@@ -79,7 +79,7 @@ bool InitSDL()
 }
 bool Createwindows()
 {
-	windows = SDL_Createwindows( "Server", posX, posY, sizeX, sizeY, 0 );
+	windows = SDL_CreateWindow( "Server", posX, posY, sizeX, sizeY, 0 );
 
 	if ( windows == nullptr )
 	{

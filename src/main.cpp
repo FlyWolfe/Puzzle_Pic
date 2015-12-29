@@ -5,10 +5,11 @@ and may not be redistributed without written permission.*/
 #ifdef _WIN32
 #include <SDL.h>
 #include <SDL_image.h>
+#include <SDL_ttf.h>
 #elif defined __unix__ || defined __APPLE__
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-//#include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_ttf.h>
 #endif
 #include <stdio.h>
 #include <string>
@@ -237,6 +238,7 @@ bool LTexture::loadFromRenderedText( std::string textureText, SDL_Color textColo
 	free();
 
 	//Render text surface
+	TTF_Font *gFont = NULL;
 	SDL_Surface* textSurface = TTF_RenderText_Solid( gFont, textureText.c_str(), textColor );
 	if( textSurface != NULL )
 	{
@@ -472,7 +474,7 @@ bool init()
 		}
 
 		//Create windows
-		gwindows = SDL_Createwindows( "SDL Tutorial", SDL_WindowPOS_UNDEFINED, SDL_WindowPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_Window_SHOWN );
+		gwindows = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
 		if( gwindows == NULL )
 		{
 			printf( "windows could not be created! SDL Error: %s\n", SDL_GetError() );
@@ -553,7 +555,7 @@ void close( Tile* tiles[] )
 
 	//Destroy windows
 	SDL_DestroyRenderer( gRenderer );
-	SDL_Destroywindows( gwindows );
+	SDL_DestroyWindow( gwindows );
 	gwindows = NULL;
 	gRenderer = NULL;
 

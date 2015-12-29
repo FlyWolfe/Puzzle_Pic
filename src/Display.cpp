@@ -2,13 +2,13 @@
 
 /*
 	DISPLAY CLASS FUNCTION DEFINITIONS
-*********************/ 
+*********************/
 
 //Used to generate Random Number
 std::random_device seeder;
 std::mt19937 engine(seeder());
 
-//Constructor of Display Class 
+//Constructor of Display Class
 Display::Display(std::string name,int initialPosX,int initialPosY,int newWidth,int newHeight,int size):
 	width(newWidth), height(newHeight),boardSize(size), bwidth(width/size), bheight(height/size){ //Integer Constructors
 	initSDL();													//Initialize SDL for Display
@@ -20,7 +20,7 @@ Display::Display(std::string name,int initialPosX,int initialPosY,int newWidth,i
 
 	createRGBSurface();											//Create Surface from RGB pixel Encoding
 	textureFromSurface();										//Create Texture from Surface
-	
+
 
 	setPalette();												//Set the Palette of the Game Board
 
@@ -152,7 +152,7 @@ void Display::createWindow(std::string name,int initialPosX,int initialPosY,int 
         initialPosY,           							// initial y position
         width,                              			// width, in pixels
         height,                             			// height, in pixels
-        SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI	 	// flags 
+        SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI	 	// flags
     );
     if(!windows){
     	std::cerr << "Create windows Error: " << name << " " << SDL_GetError() << std::endl;
@@ -191,7 +191,7 @@ void Display::setupRenderer(){
 }
 
 
-//Check Collision of the Player and Window 
+//Check Collision of the Player and Window
 bool Display::checkCollision(int posx,int posy){
 
 	if( (posx < 0) || (posx+bwidth > width) ){
@@ -222,7 +222,7 @@ void Display::makeBoard(){
 		temp.x=w;
 		//std::cerr << "Tiles: " << "size: " << tiles[i].size() << std::endl;
 		for(int j=0,h=0;j<boardSize;j++,h+=bheight){
-			//std::cerr << "Tile Created :" << "i: " << i << " j: " << j << std::endl; 
+			//std::cerr << "Tile Created :" << "i: " << i << " j: " << j << std::endl;
 			temp.y=h;
 			num=dist(engine);
 			//std::cerr << "Tile Color :" << "num: " << num << " r: " << (int)this->palette[num].r << " g: " << (int)palette[num].g << " b: " << (int)palette[num].b << " a: " << (int)palette[num].a << std::endl;
@@ -237,8 +237,8 @@ void Display::printBoard(){
 	for(int i=0;i<boardSize;i++){
 		std::cerr << "Tiles: " << "size: " << tiles[i].size() << std::endl;
 		for(int j=0;j<boardSize;j++){
-			std::cerr << "Tile Created :" << "i: " << i << " j: " << j << std::endl; 
-			std::cerr << "Tile Position :" << "x: " << tiles[i][j].getTile().x << " y: " << tiles[i][j].getTile().y << " w: " << tiles[i][j].getTile().w << " h: " << tiles[i][j].getTile().h << std::endl; 
+			std::cerr << "Tile Created :" << "i: " << i << " j: " << j << std::endl;
+			std::cerr << "Tile Position :" << "x: " << tiles[i][j].getbox().x << " y: " << tiles[i][j].getbox().y << " w: " << tiles[i][j].getbox().w << " h: " << tiles[i][j].getbox().h << std::endl;
 			std::cerr << "Tile Color :" << " r: " << (int)tiles[i][j].getColor().r << " g: " << (int)tiles[i][j].getColor().g << " b: " << (int)tiles[i][j].getColor().b << " a: " << (int)tiles[i][j].getColor().a << std::endl;
 		}
 	}
@@ -252,13 +252,13 @@ void Display::renderBoard(){
 			if(SDL_SetRenderDrawColor(this->renderer,tiles[i][j].getColor().r,tiles[i][j].getColor().g,tiles[i][j].getColor().b,tiles[i][j].getColor().a) != 0){
 				std::cerr << "Drawing Board Color Tile Error: " <<  SDL_GetError() << std::endl;
 			}
-			SDL_Rect r = tiles[i][j].getTile();
+			SDL_Rect r = tiles[i][j].getbox();
 			if(SDL_RenderFillRect(this->renderer,&r) != 0 ){
 				std::cerr << "Drawing Board Fill Tile Error: " <<  SDL_GetError() << std::endl;
 			}
 		}
 	}
-} 
+}
 
 //Render a Tile
 void Display::renderTile(int x,int y){
@@ -266,7 +266,7 @@ void Display::renderTile(int x,int y){
 	if(SDL_SetRenderDrawColor(this->renderer,tiles[x][y].getColor().r,tiles[x][y].getColor().g,tiles[x][y].getColor().b,tiles[x][y].getColor().a) != 0){
 		std::cerr << "Drawing Color Tile Error: " <<  SDL_GetError() << std::endl;
 	}
-	SDL_Rect r = tiles[x][y].getTile();
+	SDL_Rect r = tiles[x][y].getbox();
 	if(SDL_RenderFillRect(this->renderer,&r) != 0 ){
 		std::cerr << "Drawing Fill Tile Error: " <<  SDL_GetError() << std::endl;
 	}
@@ -319,7 +319,7 @@ void Display::render(SDL_Rect box){
 
 	// Render the Player
 	renderPlayer(box);
-	
+
 	// Render the changes above
 	SDL_RenderPresent(renderer);
 }
@@ -364,7 +364,7 @@ void Display::swapColors(int x1,int y1,int x2,int y2){
 	//std::cerr << "SWAP COLORS : " << " x1: " << x1 << " y1: " << y1 << " x2: " << x2 << " y2: " << y2 << std::endl;
 	//std::cerr <<"BEFORE: " << std::endl;
 	//printBoard();
-	Tiles temp = Tiles(tiles[x1][y1].getColor(),tiles[x1][y1].getTile());
+	Tiles temp = Tiles(tiles[x1][y1].getColor(),tiles[x1][y1].getbox());
 	tiles[x1][y1].setColor(tiles[x2][y2].getColor());
 	tiles[x2][y2].setColor(temp.getColor());
 	//std::cerr <<"AFTER: " << std::endl;

@@ -1,10 +1,11 @@
 #ifdef _WIN32
 #include <SDL.h>
 #include <SDL_image.h>
+#include <SDL_ttf.h>
 #elif defined __unix__ || defined __APPLE__
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-//#include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_ttf.h>
 #endif
 
 #include <iostream>
@@ -15,19 +16,25 @@
 #include <algorithm>
 #include <iterator>
 
-//Classes Used
-class Tiles;
+#include "Display.h"
+#include "Util.h"
+#include "Tiles.h"
+#include "Player.h"
 
-SDL_Color BLACK = {0,0,0,255};        //Color BLACK
-SDL_Color WHITE = {255,255,255,255};  //Color WHITE
+//Classes Used
+//class Tiles;
+
+//SDL_Color BLACK = {0,0,0,255};        //Color BLACK
+//SDL_Color WHITE = {255,255,255,255};  //Color WHITE
 
 /*
 	DISPLAY CLASS
-*********************/ 
+*********************/
+/*
 class Display{
 
 	private:
-		SDL_Texture* texture;			
+		SDL_Texture* texture;
 		SDL_Renderer* renderer;
 		SDL_Surface* surface;
 		SDL_Window* windows;
@@ -52,9 +59,9 @@ class Display{
 				int newWidth,					//Width of Window;
 				int newHeight,					//Height of Window;
 				int size						//Size of the Board;
-				); 
+				);
 
-		void initSDL();							//Initialize SDL  
+		void initSDL();							//Initialize SDL
 		//void initTTF();							//Initialize TTF
 
 		void setPalette();						//Create the Colors of the Display
@@ -71,7 +78,7 @@ class Display{
 							int width,			//Width of Window
 							int height 			//Height of Window
 							);
-		void createRenderer();					//Creates the SDL Renderer 
+		void createRenderer();					//Creates the SDL Renderer
 
 		void textureFromSurface();				//Creates A Texture From A Surface
 		void createRGBSurface();				//Creates a Surface from RGB Masks
@@ -94,7 +101,7 @@ class Display{
 		void renderBoard();						//Render the Board
 
 		void renderPlayerScale(					//Change the Thickness of the Line for the Player
-					SDL_Rect* newBox			//Players Box 
+					SDL_Rect* newBox			//Players Box
 					);
 
 		void close();							//Close the Display and SDL
@@ -103,7 +110,7 @@ class Display{
 		int getWidth();							//Get width of Display
 		int getHeight();						//Get height of Display
 
-		int getBwidth();						//Get tile width  
+		int getBwidth();						//Get tile width
 		int getBheight();						//Get tile height
 
 		int getBoardSize();						//Get board size
@@ -119,8 +126,8 @@ class Display{
 
 /*
 	TILES CLASS
-*********************/ 
-
+*********************/
+/*
 class Tiles{
 
 	private:
@@ -138,7 +145,7 @@ class Tiles{
 		void setColor(SDL_Color newColor);	//Set the Color of a Tile
 		SDL_Color getColor();				//Get the Color of a Tile
 
-		void setTile(SDL_Rect newTile);		//Set the Rectangle Box of a Tile 
+		void setTile(SDL_Rect newTile);		//Set the Rectangle Box of a Tile
 		SDL_Rect getTile();					//Get the Rectangle Box of a Tile
 
 		//void renderTile(SDL_Renderer renderer);
@@ -147,10 +154,10 @@ class Tiles{
 
 /*
 	TILES CLASS FUNCTION DEFINITIONS
-*********************/ 
+*********************/
 
-
-//Empty Constructor 
+/*
+//Empty Constructor
 Tiles::Tiles(){
 	this->color = WHITE;
 }
@@ -167,8 +174,8 @@ Tiles::~Tiles(){
 	std::cerr << "END OF TILE" << std::endl;
 }
 */
-
-//Set Color 
+/*
+//Set Color
 void Tiles::setColor(SDL_Color newColor){
 	//std::cerr << "SET COLOR" << std::endl;
 	this->color = newColor;
@@ -191,14 +198,14 @@ SDL_Rect Tiles::getTile(){
 
 /*
 	DISPLAY CLASS FUNCTION DEFINITIONS
-*********************/ 
+*********************/
 
 //Used to generate Random Number
-std::random_device seeder;
-std::mt19937 engine(seeder());
+//std::random_device seeder;
+//std::mt19937 engine(seeder());
 
-//Constructor of Display Class 
-Display::Display(std::string name,int initialPosX,int initialPosY,int newWidth,int newHeight,int size):
+//Constructor of Display Class
+/*Display::Display(std::string name,int initialPosX,int initialPosY,int newWidth,int newHeight,int size):
 	width(newWidth), height(newHeight),boardSize(size), bwidth(width/size), bheight(height/size){ //Integer Constructors
 	initSDL();													//Initialize SDL for Display
 	//initTTF();													//Initialize TTF for Fonts and Displaying Words
@@ -209,7 +216,7 @@ Display::Display(std::string name,int initialPosX,int initialPosY,int newWidth,i
 
 	createRGBSurface();											//Create Surface from RGB pixel Encoding
 	textureFromSurface();										//Create Texture from Surface
-	
+
 
 	setPalette();												//Set the Palette of the Game Board
 
@@ -238,7 +245,7 @@ void Display::initSDL(){
     }
     //return true;
 }*/
-
+/*
 //Set the Palette of the Game Board
 void Display::setPalette(){
 
@@ -341,7 +348,7 @@ void Display::createWindow(std::string name,int initialPosX,int initialPosY,int 
         initialPosY,           							// initial y position
         width,                              			// width, in pixels
         height,                             			// height, in pixels
-        SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI	 	// flags 
+        SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI	 	// flags
     );
     if(!windows){
     	std::cerr << "Create windows Error: " << name << " " << SDL_GetError() << std::endl;
@@ -380,7 +387,7 @@ void Display::setupRenderer(){
 }
 
 
-//Check Collision of the Player and Window 
+//Check Collision of the Player and Window
 bool Display::checkCollision(int posx,int posy){
 
 	if( (posx < 0) || (posx+bwidth > width) ){
@@ -411,7 +418,7 @@ void Display::makeBoard(){
 		temp.x=w;
 		//std::cerr << "Tiles: " << "size: " << tiles[i].size() << std::endl;
 		for(int j=0,h=0;j<boardSize;j++,h+=bheight){
-			//std::cerr << "Tile Created :" << "i: " << i << " j: " << j << std::endl; 
+			//std::cerr << "Tile Created :" << "i: " << i << " j: " << j << std::endl;
 			temp.y=h;
 			num=dist(engine);
 			//std::cerr << "Tile Color :" << "num: " << num << " r: " << (int)this->palette[num].r << " g: " << (int)palette[num].g << " b: " << (int)palette[num].b << " a: " << (int)palette[num].a << std::endl;
@@ -426,8 +433,8 @@ void Display::printBoard(){
 	for(int i=0;i<boardSize;i++){
 		std::cerr << "Tiles: " << "size: " << tiles[i].size() << std::endl;
 		for(int j=0;j<boardSize;j++){
-			std::cerr << "Tile Created :" << "i: " << i << " j: " << j << std::endl; 
-			std::cerr << "Tile Position :" << "x: " << tiles[i][j].getTile().x << " y: " << tiles[i][j].getTile().y << " w: " << tiles[i][j].getTile().w << " h: " << tiles[i][j].getTile().h << std::endl; 
+			std::cerr << "Tile Created :" << "i: " << i << " j: " << j << std::endl;
+			std::cerr << "Tile Position :" << "x: " << tiles[i][j].getTile().x << " y: " << tiles[i][j].getTile().y << " w: " << tiles[i][j].getTile().w << " h: " << tiles[i][j].getTile().h << std::endl;
 			std::cerr << "Tile Color :" << " r: " << (int)tiles[i][j].getColor().r << " g: " << (int)tiles[i][j].getColor().g << " b: " << (int)tiles[i][j].getColor().b << " a: " << (int)tiles[i][j].getColor().a << std::endl;
 		}
 	}
@@ -447,7 +454,7 @@ void Display::renderBoard(){
 			}
 		}
 	}
-} 
+}
 
 //Render a Tile
 void Display::renderTile(int x,int y){
@@ -508,7 +515,7 @@ void Display::render(SDL_Rect box){
 
 	// Render the Player
 	renderPlayer(box);
-	
+
 	// Render the changes above
 	SDL_RenderPresent(renderer);
 }
@@ -568,8 +575,8 @@ Tiles* Display::getTileFromTiles(int i,int j){
 
 /*
 	PLAYER CLASS
-*********************/ 
-
+*********************/
+/*
 class Player{
 	private:
 		std::string name;			//Name Of Player
@@ -603,8 +610,8 @@ class Player{
 
 /*
 	PLAYER CLASS FUNCTION DEFINITIONS
-*********************/ 
-
+*********************/
+/*
 //Constructor of Player CLass
 Player::Player(SDL_Rect newBox){
 	name="DEATH";
@@ -660,9 +667,9 @@ bool Player::getSwap(){
 
 /*
 	MAIN FUNCTION
-*********************/ 
+*********************/
 
-int main(int argc, char const *argv[]){
+int main(int argc, char *argv[]){
 	Display display = Display("Puzzle Pic",0,0,400,400,2);
     //Game game = new Game();
 
@@ -699,7 +706,7 @@ int main(int argc, char const *argv[]){
                        			player.switchSwap();
                        			std::cerr << "MOVE TO SWAP WITH THAT COLOR" << std::endl;
                        			//display.printBoard();
-                       			
+
                        		}
                        		//display.getTileFromTiles(0,0)->setColor(BLACK);
                        		display.render(player.getBox());
@@ -766,7 +773,7 @@ int main(int argc, char const *argv[]){
                 break;
             }
          	//display.render(player.getBox());
-        } 
+        }
     }
 	return 0;
 }

@@ -1,6 +1,8 @@
 #ifndef _GAME_H_
 #define _GAME_H_
 
+#include <vector>
+
 #include "Player.h"
 #include "Tiles.h"
 
