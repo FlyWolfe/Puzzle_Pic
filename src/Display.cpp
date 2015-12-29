@@ -1,12 +1,17 @@
 #include "Display.h"
+#include <chrono>
 
 /*
 	DISPLAY CLASS FUNCTION DEFINITIONS
 *********************/
 
 //Used to generate Random Number
+#ifdef _WIN32
+std::mt19937 engine(std::chrono::system_clock::now().time_since_epoch().count());
+#elif defined __unix__ || defined __APPLE__
 std::random_device seeder;
 std::mt19937 engine(seeder());
+#endif
 
 //Constructor of Display Class
 Display::Display(std::string name,int initialPosX,int initialPosY,int newWidth,int newHeight,int size):
@@ -238,7 +243,7 @@ void Display::printBoard(){
 		std::cerr << "Tiles: " << "size: " << tiles[i].size() << std::endl;
 		for(int j=0;j<boardSize;j++){
 			std::cerr << "Tile Created :" << "i: " << i << " j: " << j << std::endl;
-			std::cerr << "Tile Position :" << "x: " << tiles[i][j].getBox().x << " y: " << tiles[i][j].getBox().y << " w: " << tiles[i][j].getBox().w << " h: " << tiles[i][j].getBox().h << std::endl;
+			std::cerr << "Tile Position :" << "x: " << tiles[i][j].getbox().x << " y: " << tiles[i][j].getbox().y << " w: " << tiles[i][j].getbox().w << " h: " << tiles[i][j].getbox().h << std::endl;
 			std::cerr << "Tile Color :" << " r: " << (int)tiles[i][j].getColor().r << " g: " << (int)tiles[i][j].getColor().g << " b: " << (int)tiles[i][j].getColor().b << " a: " << (int)tiles[i][j].getColor().a << std::endl;
 		}
 	}
@@ -252,7 +257,7 @@ void Display::renderBoard(){
 			if(SDL_SetRenderDrawColor(this->renderer,tiles[i][j].getColor().r,tiles[i][j].getColor().g,tiles[i][j].getColor().b,tiles[i][j].getColor().a) != 0){
 				std::cerr << "Drawing Board Color Tile Error: " <<  SDL_GetError() << std::endl;
 			}
-			SDL_Rect r = tiles[i][j].getBox();
+			SDL_Rect r = tiles[i][j].getbox();
 			if(SDL_RenderFillRect(this->renderer,&r) != 0 ){
 				std::cerr << "Drawing Board Fill Tile Error: " <<  SDL_GetError() << std::endl;
 			}
@@ -266,7 +271,7 @@ void Display::renderTile(int x,int y){
 	if(SDL_SetRenderDrawColor(this->renderer,tiles[x][y].getColor().r,tiles[x][y].getColor().g,tiles[x][y].getColor().b,tiles[x][y].getColor().a) != 0){
 		std::cerr << "Drawing Color Tile Error: " <<  SDL_GetError() << std::endl;
 	}
-	SDL_Rect r = tiles[x][y].getBox();
+	SDL_Rect r = tiles[x][y].getbox();
 	if(SDL_RenderFillRect(this->renderer,&r) != 0 ){
 		std::cerr << "Drawing Fill Tile Error: " <<  SDL_GetError() << std::endl;
 	}
@@ -364,7 +369,7 @@ void Display::swapColors(int x1,int y1,int x2,int y2){
 	//std::cerr << "SWAP COLORS : " << " x1: " << x1 << " y1: " << y1 << " x2: " << x2 << " y2: " << y2 << std::endl;
 	//std::cerr <<"BEFORE: " << std::endl;
 	//printBoard();
-	Tiles temp = Tiles(tiles[x1][y1].getColor(),tiles[x1][y1].getBox());
+	Tiles temp = Tiles(tiles[x1][y1].getColor(),tiles[x1][y1].getbox());
 	tiles[x1][y1].setColor(tiles[x2][y2].getColor());
 	tiles[x2][y2].setColor(temp.getColor());
 	//std::cerr <<"AFTER: " << std::endl;
