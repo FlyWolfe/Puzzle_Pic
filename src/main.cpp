@@ -472,7 +472,7 @@ bool init()
 		}
 
 		//Create windows
-		gwindows = SDL_Createwindows( "SDL Tutorial", SDL_WindowPOS_UNDEFINED, SDL_WindowPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_Window_SHOWN );
+		gwindows = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
 		if( gwindows == NULL )
 		{
 			printf( "windows could not be created! SDL Error: %s\n", SDL_GetError() );
@@ -553,7 +553,7 @@ void close( Tile* tiles[] )
 
 	//Destroy windows
 	SDL_DestroyRenderer( gRenderer );
-	SDL_Destroywindows( gwindows );
+	SDL_DestroyWindow( gwindows );
 	gwindows = NULL;
 	gRenderer = NULL;
 

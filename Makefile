@@ -12,7 +12,7 @@ CCFL := -c -g -Wall `pkg-config --cflags $(SDL2) $(SDL2_IMAGE) `
 LDFL := -Wall `pkg-config --libs $(SDL2) $(SDL2_IMAGE) `
 
 # List of source files. 
-SRCS := GAMEMAIN.cpp
+SRCS := main.cpp
 
 #SRCS := Tiles.cpp Player.cpp Display.cpp Test.cpp 
 
