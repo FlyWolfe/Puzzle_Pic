@@ -2,13 +2,13 @@
 
 /*
 	DISPLAY CLASS FUNCTION DEFINITIONS
-*********************/ 
+*********************/
 
 //Used to generate Random Number
 std::random_device seeder;
 std::mt19937 engine(seeder());
 
-//Constructor of Display Class 
+//Constructor of Display Class
 Display::Display(std::string name,int initialPosX,int initialPosY,int newWidth,int newHeight,int size):
 	width(newWidth), height(newHeight), bwidth(width/size), bheight(height/size), boardSize(size){ //Integer Constructors
 	initSDL();													//Initialize SDL for Display
@@ -20,7 +20,7 @@ Display::Display(std::string name,int initialPosX,int initialPosY,int newWidth,i
 
 	createRGBSurface();											//Create Surface from RGB pixel Encoding
 	textureFromSurface();										//Create Texture from Surface
-	
+
 
 	setPalette();												//Set the Palette of the Game Board
 
@@ -152,7 +152,7 @@ void Display::createWindow(std::string name,int initialPosX,int initialPosY,int 
         initialPosY,           							// initial y position
         width,                              			// width, in pixels
         height,                             			// height, in pixels
-        SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI	 	// flags 
+        SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI	 	// flags
     );
     if(!windows){
     	std::cerr << "Create windows Error: " << name << " " << SDL_GetError() << std::endl;
@@ -191,7 +191,7 @@ void Display::setupRenderer(){
 }
 
 
-//Check Collision of the Player and Window 
+//Check Collision of the Player and Window
 bool Display::checkCollision(int posx,int posy){
 
 	if( (posx < 0) || (posx+bwidth > width) ){
@@ -222,7 +222,7 @@ void Display::makeBoard(){
 		temp.x=w;
 		//std::cerr << "Tiles: " << "size: " << tiles[i].size() << std::endl;
 		for(int j=0,h=0;j<boardSize;j++,h+=bheight){
-			//std::cerr << "Tile Created :" << "i: " << i << " j: " << j << std::endl; 
+			//std::cerr << "Tile Created :" << "i: " << i << " j: " << j << std::endl;
 			temp.y=h;
 			num=dist(engine);
 			//std::cerr << "Tile Color :" << "num: " << num << " r: " << (int)this->palette[num].r << " g: " << (int)palette[num].g << " b: " << (int)palette[num].b << " a: " << (int)palette[num].a << std::endl;
@@ -258,7 +258,7 @@ void Display::renderBoard(){
 			}
 		}
 	}
-} 
+}
 
 //Render a Tile
 void Display::renderTile(int x,int y){
@@ -319,7 +319,7 @@ void Display::render(SDL_Rect box){
 
 	// Render the Player
 	renderPlayer(box);
-	
+
 	// Render the changes above
 	SDL_RenderPresent(renderer);
 }

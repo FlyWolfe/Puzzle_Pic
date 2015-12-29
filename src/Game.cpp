@@ -1,7 +1,7 @@
 
 #include "Game.h"
 
-Game(int size,int w,int h,int newbwidth,int newbheight);
+Game::Game(int size,int w,int h,int newbwidth,int newbheight){}
 
 		void swapColors(Tiles tile1,Tiles tile2);
 

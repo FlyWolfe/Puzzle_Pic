@@ -5,8 +5,8 @@ SDL_Color BLACK = {0,0,0,255};        //Color BLACK
 SDL_Color WHITE = {255,255,255,255};  //Color WHITE
 
 /*
-	TILES CLASS FUNCTION DEFINITIONS
-*********************/ 
+	Tiles CLASS FUNCTION DEFINITIONS
+*********************/
 
 
 //Empty Constructor 
@@ -22,7 +22,7 @@ Tiles::Tiles(SDL_Color newColor,SDL_Rect newBox){
 }
 
 /*
-TILES::~TILES(){
+Tiles::~Tiles(){
 	std::cerr << "END OF box" << std::endl;
 }
 */

@@ -4,10 +4,11 @@
 #ifdef _WIN32
 #include <SDL.h>
 #include <SDL_image.h>
+#include <SDL_ttf.h>
 #elif defined __unix__ || defined __APPLE__
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-//#include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_ttf.h>
 #endif
 
 #include <string>
@@ -21,11 +22,11 @@
 
 /*
 	DISPLAY CLASS
-*********************/ 
+*********************/
 class Display{
 
 	private:
-		SDL_Texture* texture;			
+		SDL_Texture* texture;
 		SDL_Renderer* renderer;
 		SDL_Surface* surface;
 		SDL_Window* windows;
@@ -50,9 +51,9 @@ class Display{
 				int newWidth,					//Width of Window;
 				int newHeight,					//Height of Window;
 				int size						//Size of the Board;
-				); 
+				);
 
-		void initSDL();							//Initialize SDL  
+		void initSDL();							//Initialize SDL
 		void initTTF();							//Initialize TTF
 
 		void setPalette();						//Create the Colors of the Display
@@ -69,7 +70,7 @@ class Display{
 							int width,			//Width of Window
 							int height 			//Height of Window
 							);
-		void createRenderer();					//Creates the SDL Renderer 
+		void createRenderer();					//Creates the SDL Renderer
 
 		void textureFromSurface();				//Creates A Texture From A Surface
 		void createRGBSurface();				//Creates a Surface from RGB Masks
@@ -87,12 +88,12 @@ class Display{
 
 		void render(SDL_Rect box);				//Render Player and Board
 		void renderPlayer(SDL_Rect box);		//Render The Player
-		void renderTile(int x,int y);						//Render Tiles 
+		void renderTile(int x,int y);						//Render Tiles
 
 		void renderBoard();						//Render the Board
 
 		void renderPlayerScale(					//Change the Thickness of the Line for the Player
-					SDL_Rect* newBox			//Players Box 
+					SDL_Rect* newBox			//Players Box
 					);
 
 		void close();							//Close the Display and SDL
@@ -101,7 +102,7 @@ class Display{
 		int getWidth();							//Get width of Display
 		int getHeight();						//Get height of Display
 
-		int getBwidth();						//Get tile width  
+		int getBwidth();						//Get tile width
 		int getBheight();						//Get tile height
 
 		int getBoardSize();						//Get board size
