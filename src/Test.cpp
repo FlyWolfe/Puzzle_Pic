@@ -5,9 +5,9 @@
 
 /*
     MAIN FUNCTION
-*********************/ 
+*********************/
 
-int main(int argc, char const *argv[]){
+int main(int argc, char *argv[]){
     Display display = Display("Puzzle Pic",0,0,400,400,2);
     //Game game = new Game();
 
@@ -44,7 +44,7 @@ int main(int argc, char const *argv[]){
                                 player.switchSwap();
                                 std::cerr << "MOVE TO SWAP WITH THAT COLOR" << std::endl;
                                 //display.printBoard();
-                                
+
                             }
                             //display.getTileFromTiles(0,0)->setColor(BLACK);
                             display.render(player.getBox());
@@ -111,7 +111,7 @@ int main(int argc, char const *argv[]){
                 break;
             }
             //display.render(player.getBox());
-        } 
+        }
     }
     return 0;
 }
