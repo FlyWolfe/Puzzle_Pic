@@ -8,13 +8,12 @@
 *********************/
 
 int main(int argc, char *argv[]){
-    Display display = Display("Puzzle Pic",0,0,400,400,2);
+    Display display = Display("Puzzle Pic",SDL_WINDOWPOS_UNDEFINED,SDL_WINDOWPOS_UNDEFINED,400,400,2);
     //Game game = new Game();
 
     std::cerr << std::endl << std::endl;
     std::cerr << "ARROW KEYS TO MOVE. SPACE TO TOGGLE SWAPPING COLOR OF TILES" << std::endl;
 
-    display.printBoard();
     SDL_Rect r = {0,0,display.getBwidth(),display.getBheight()};
     Player player = Player(r);
     display.render(player.getBox());
@@ -42,11 +41,7 @@ int main(int argc, char *argv[]){
                                 //std::cerr << "SWAP COLORS : " << " x1: " << player.getPosx()/display.getBwidth() << " y1: " << player.getPosy()/display.getBheight() << " x2: " << player.getPosx()/display.getBwidth() << " y2: " << (player.getPosy()+display.getBheight())/display.getBheight() << std::endl;
                                 display.swapColors(player.getPosx()/display.getBwidth(),player.getPosy()/display.getBheight(),player.getPosx()/display.getBwidth(),(player.getPosy()+display.getBheight())/display.getBheight());
                                 player.switchSwap();
-                                std::cerr << "MOVE TO SWAP WITH THAT COLOR" << std::endl;
-                                //display.printBoard();
-
                             }
-                            //display.getTileFromTiles(0,0)->setColor(BLACK);
                             display.render(player.getBox());
                         break;
                         case SDLK_DOWN: //Move Player Down
@@ -58,10 +53,7 @@ int main(int argc, char *argv[]){
                                 //std::cerr << "SWAP COLORS : " << " x1: " << player.getPosx()/display.getBwidth() << " y1: " << player.getPosy()/display.getBheight() << " x2: " << player.getPosx()/display.getBwidth() << " y2: " << (player.getPosy()-display.getBheight())/display.getBheight() << std::endl;
                                 display.swapColors(player.getPosx()/display.getBwidth(),player.getPosy()/display.getBheight(),player.getPosx()/display.getBwidth(),(player.getPosy()-display.getBheight())/display.getBheight());
                                 player.switchSwap();
-                                std::cerr << "MOVE TO SWAP WITH THAT COLOR" << std::endl;
-                                //display.printBoard();
                             }
-                            //display.getTileFromTiles(0,0)->setColor(BLACK);
                             display.render(player.getBox());
                         break;
                         case SDLK_LEFT://Move Player Left
@@ -70,13 +62,9 @@ int main(int argc, char *argv[]){
                             if(display.checkCollision(player.getPosx(),player.getPosy())){
                                 player.setPos(player.getPosx()+display.getBwidth(),player.getPosy());
                             }else if(player.getSwap()){
-                                //std::cerr << "SWAP COLORS : " << " x1: " << player.getPosx()/display.getBwidth() << " y1: " << player.getPosy()/display.getBheight() << " x2: " << (player.getPosx()+display.getBwidth())/display.getBwidth() << " y2: " << (player.getPosy())/display.getBheight() << std::endl;
                                 display.swapColors(player.getPosx()/display.getBwidth(),player.getPosy()/display.getBheight(),(player.getPosx()+display.getBwidth())/display.getBwidth(),(player.getPosy())/display.getBheight());
                                 player.switchSwap();
-                                std::cerr << "MOVE TO SWAP WITH THAT COLOR" << std::endl;
-                                //display.printBoard();
                             }
-                            //display.getTileFromTiles(0,0)->setColor(BLACK);
                             display.render(player.getBox());
                         break;
                         case SDLK_RIGHT: //Move Player Right
@@ -88,16 +76,13 @@ int main(int argc, char *argv[]){
                                 //std::cerr << "SWAP COLORS : " << " x1: " << player.getPosx()/display.getBwidth() << " y1: " << player.getPosy()/display.getBheight() << " x2: " << (player.getPosx()-display.getBwidth())/display.getBwidth() << " y2: " << (player.getPosy())/display.getBheight() << std::endl;
                                 display.swapColors(player.getPosx()/display.getBwidth(),player.getPosy()/display.getBheight(),(player.getPosx()-display.getBwidth())/display.getBwidth(),(player.getPosy())/display.getBheight());
                                 player.switchSwap();
-                                std::cerr << "MOVE TO SWAP WITH THAT COLOR" << std::endl;
-                                //display.printBoard();
                             }
-                            //display.getTileFromTiles(0,0)->setColor(BLACK);
                             display.render(player.getBox());
                         break;
                         case SDLK_SPACE://Toggle Swap
                             //std::cerr << "SPACE PRESSED: " << "PLayer swap: " << player.getSwap() << std::endl;
+                            std::cerr << "MOVE TO SWAP WITH THAT COLOR" << std::endl;
                             player.switchSwap();
-                            //std::cerr << "SPACE PRESSED: " << "PLayer swap: " << player.getSwap() << std::endl;
                         break;
                         case SDLK_p:   //Print Board For Debugging Purposes
                             display.printBoard();

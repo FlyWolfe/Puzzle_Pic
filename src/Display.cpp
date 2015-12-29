@@ -147,12 +147,12 @@ void Display::createWindow(std::string name,int initialPosX,int initialPosY,int 
 
 	// Create an application windows with the following settings:
     windows = SDL_CreateWindow(
-        name.c_str(),                  							// windows title
+        name.c_str(),                  					// windows title
         initialPosX,           							// initial x position
         initialPosY,           							// initial y position
         width,                              			// width, in pixels
         height,                             			// height, in pixels
-        SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI	 	// flags
+        SDL_WINDOW_SHOWN	 							// flags
     );
     if(!windows){
     	std::cerr << "Create windows Error: " << name << " " << SDL_GetError() << std::endl;
@@ -308,7 +308,6 @@ void Display::renderPlayer(SDL_Rect box){
 
 //Render all Objects
 void Display::render(SDL_Rect box){
-	std::cerr << "RENDER" << std::endl;
 	// Change color to black
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	//clear screen

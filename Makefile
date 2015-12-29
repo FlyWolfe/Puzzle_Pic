@@ -12,9 +12,9 @@ CCFL := -c -g -Wall `pkg-config --cflags $(SDL2) $(SDL2_IMAGE) $(SDL2_TTF)`
 LDFL := -Wall `pkg-config --libs $(SDL2) $(SDL2_IMAGE) $(SDL2_TTF)`
 
 # List of source files. 
-SRCS := main.cpp
+#SRCS := main.cpp
 
-#SRCS := Tiles.cpp Player.cpp Display.cpp Test.cpp 
+SRCS := Tiles.cpp Player.cpp Display.cpp Test.cpp 
 
 # Construct file lists
 OBJS := $(addprefix build/obj/,$(patsubst %.cpp,%.o,$(SRCS)))
