@@ -48,6 +48,46 @@ int Player::getPosy(){
 	return this->box.y;
 }
 
+bool Player::moveUP(int check){
+	if((box.y-box.h) > check-1){
+		box.y-=box.h;
+		return true;
+	}
+	return false;
+}
+
+bool Player::moveDOWN(int check){
+	if((box.y+box.h) < check-1){
+		box.y+=box.h;
+		return true;
+	}
+	return false;
+}
+
+bool Player::moveRIGHT(int check){
+	if((box.x+box.w) < check-1){
+		box.x+=box.w;
+		return true;
+	}
+	return false;
+}
+
+bool Player::moveLEFT(int check){
+	if((box.x-box.w) > check-1){
+		box.x-=box.w;
+		return true;
+	}
+	return false;
+}
+
+void Player::click(){
+	this->clicks++;
+}
+
+int Player::getClicks(){
+	return this->clicks;
+}
+
 //Toggle the swap Boolean
 void Player::switchSwap(){
 	this->swap=!this->swap;

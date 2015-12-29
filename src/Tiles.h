@@ -35,6 +35,8 @@ class Tiles{
 		void setBox(SDL_Rect newBox);		//Set the Rectangle Box of a box 
 		SDL_Rect getBox();					//Get the Rectangle Box of a box
 
+		void printTile();
+
 		//void renderbox(SDL_Renderer renderer);
 
 };

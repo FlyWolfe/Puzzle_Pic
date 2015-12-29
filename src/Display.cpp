@@ -1,5 +1,7 @@
 #include "Display.h"
 #include <chrono>
+#include <cmath>
+#include <random>
 
 /*
 	DISPLAY CLASS FUNCTION DEFINITIONS
@@ -212,6 +214,22 @@ bool Display::checkCollision(int posx,int posy){
 	return false;
 }
 
+void Display::getClickedTile(int posx,int posy,int num){
+	int x, y;
+
+	x=(posx/bwidth)%boardSize;
+	y=(posy/bheight)%boardSize;
+
+	std::cerr << "CLICKED TILE: " << " x: " << x << " y: " << y <<  " posx: " <<  posx   << " posy: " << posy << std::endl; 
+	
+	(num%2==0)?clickedTiles[0]=&tiles[x][y]:clickedTiles[1]=&tiles[x][y];
+}
+
+void Display::deleteClickedTiles(){
+	clickedTiles[0]=NULL;
+	clickedTiles[1]=NULL;
+}
+
 //Make Board
 void Display::makeBoard(){
 	std::uniform_int_distribution<int> dist(0,palette.size()-1);
@@ -243,7 +261,7 @@ void Display::printBoard(){
 		std::cerr << "Tiles: " << "size: " << tiles[i].size() << std::endl;
 		for(int j=0;j<boardSize;j++){
 			std::cerr << "Tile Created :" << "i: " << i << " j: " << j << std::endl;
-			std::cerr << "Tile Position :" << "x: " << tiles[i][j].getbox().x << " y: " << tiles[i][j].getbox().y << " w: " << tiles[i][j].getbox().w << " h: " << tiles[i][j].getbox().h << std::endl;
+			std::cerr << "Tile Position :" << "x: " << tiles[i][j].getBox().x << " y: " << tiles[i][j].getBox().y << " w: " << tiles[i][j].getBox().w << " h: " << tiles[i][j].getBox().h << std::endl;
 			std::cerr << "Tile Color :" << " r: " << (int)tiles[i][j].getColor().r << " g: " << (int)tiles[i][j].getColor().g << " b: " << (int)tiles[i][j].getColor().b << " a: " << (int)tiles[i][j].getColor().a << std::endl;
 		}
 	}
@@ -257,7 +275,7 @@ void Display::renderBoard(){
 			if(SDL_SetRenderDrawColor(this->renderer,tiles[i][j].getColor().r,tiles[i][j].getColor().g,tiles[i][j].getColor().b,tiles[i][j].getColor().a) != 0){
 				std::cerr << "Drawing Board Color Tile Error: " <<  SDL_GetError() << std::endl;
 			}
-			SDL_Rect r = tiles[i][j].getbox();
+			SDL_Rect r = tiles[i][j].getBox();
 			if(SDL_RenderFillRect(this->renderer,&r) != 0 ){
 				std::cerr << "Drawing Board Fill Tile Error: " <<  SDL_GetError() << std::endl;
 			}
@@ -271,7 +289,7 @@ void Display::renderTile(int x,int y){
 	if(SDL_SetRenderDrawColor(this->renderer,tiles[x][y].getColor().r,tiles[x][y].getColor().g,tiles[x][y].getColor().b,tiles[x][y].getColor().a) != 0){
 		std::cerr << "Drawing Color Tile Error: " <<  SDL_GetError() << std::endl;
 	}
-	SDL_Rect r = tiles[x][y].getbox();
+	SDL_Rect r = tiles[x][y].getBox();
 	if(SDL_RenderFillRect(this->renderer,&r) != 0 ){
 		std::cerr << "Drawing Fill Tile Error: " <<  SDL_GetError() << std::endl;
 	}
@@ -299,7 +317,7 @@ void Display::renderPlayer(SDL_Rect box){
 		std::cerr << "Drawing Player Error: " <<  SDL_GetError() << std::endl;
 	}
 
-	//renderPlayerScale(&box);
+	renderPlayerScale(&box);
 
 	//std::cerr << "Player scaled: " << " x: " << box.x << " y: " << box.y << " w: " << box.w << " h: " << box.h << std::endl;
 	if(SDL_RenderDrawRect(renderer,&box) != 0 ){
@@ -313,7 +331,6 @@ void Display::renderPlayer(SDL_Rect box){
 
 //Render all Objects
 void Display::render(SDL_Rect box){
-	std::cerr << "RENDER" << std::endl;
 	// Change color to black
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	//clear screen
@@ -331,6 +348,11 @@ void Display::render(SDL_Rect box){
 
 //Close Display
 void Display::close(){
+
+	free(clickedTiles[0]);
+	free(clickedTiles[1]);
+
+	deleteClickedTiles();
 
 	SDL_DestroyTexture(texture);
 	SDL_DestroyRenderer(renderer);
@@ -365,16 +387,49 @@ int Display::getBoardSize(){
 }
 
 //Swap Colors of Two Tiles
-void Display::swapColors(int x1,int y1,int x2,int y2){
-	//std::cerr << "SWAP COLORS : " << " x1: " << x1 << " y1: " << y1 << " x2: " << x2 << " y2: " << y2 << std::endl;
-	//std::cerr <<"BEFORE: " << std::endl;
-	//printBoard();
-	Tiles temp = Tiles(tiles[x1][y1].getColor(),tiles[x1][y1].getbox());
+void Display::swapColorsKeyboard(int x,int y,int num){
+
+	int x1=x/bwidth,y1=y/bheight,x2=0,y2=0;
+
+	switch(num){
+		case UP://UP
+			x2=x/bwidth;
+			y2=(y+bheight)/bheight;
+		break;
+		case DOWN://DOWN
+			x2=x/bwidth;
+			y2=(y-bheight)/bheight;
+		break;
+		case LEFT://LEFT
+			x2=(x+bwidth)/bwidth;
+			y2=y/bheight;
+		break;
+		case RIGHT://RIGHT
+			x2=(x-bwidth)/bwidth;
+			y2=y/bheight;
+		break;
+		default:
+			std::cerr << "INVALID DIRECTION FOR COLOR SWAP!" << std::endl;
+		break;
+	}
+
+	/*std::cerr << "TILES: " << std::endl;
+	tiles[x1][y1].printTile();
+	tiles[x2][y2].printTile();*/
+	
+	Tiles temp = Tiles(tiles[x1][y1].getColor(),tiles[x1][y1].getBox());
 	tiles[x1][y1].setColor(tiles[x2][y2].getColor());
 	tiles[x2][y2].setColor(temp.getColor());
-	//std::cerr <<"AFTER: " << std::endl;
-	//printBoard();
-	//std::cerr <<"DONE SWAP COLORS: " << std::endl;
+}
+
+void Display::swapColorsMouse(){
+	if(clickedTiles[0]!=NULL && clickedTiles[1]!=NULL){
+		Tiles temp = Tiles(clickedTiles[0]->getColor(),clickedTiles[0]->getBox());
+		clickedTiles[0]->setColor(clickedTiles[1]->getColor());
+		clickedTiles[1]->setColor(temp.getColor());
+		clickedTiles[0]=NULL;
+		clickedTiles[1]=NULL;
+	}
 }
 
 //Get Pointer to a tile on a board

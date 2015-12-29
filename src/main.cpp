@@ -11,6 +11,7 @@ and may not be redistributed without written permission.*/
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 #endif
+
 #include <stdio.h>
 #include <string>
 #include <fstream>

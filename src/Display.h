@@ -12,12 +12,17 @@
 #endif
 
 #include <string>
-#include <cmath>
-#include <random>
 #include <iostream>
 #include <vector>
 
 #include "Tiles.h"
+
+enum {
+	UP,
+	DOWN,
+	LEFT,
+	RIGHT
+};
 
 
 /*
@@ -42,6 +47,8 @@ class Display{
 		int boardSize;					//Number of a Row if 3X3 the boardsize is 3
 
 		std::vector<std::vector<Tiles> > tiles; //Vector of vectors of Tiles
+
+		Tiles *clickedTiles[2];
 
 	public:
 		//Contructor
@@ -86,6 +93,10 @@ class Display{
 
 		bool checkCollision(int posx,int posy);	//Check the Collision of the Player with the window boundaries
 
+		void getClickedTile(int posx,int posy,int num);
+
+		void deleteClickedTiles();
+
 		void render(SDL_Rect box);				//Render Player and Board
 		void renderPlayer(SDL_Rect box);		//Render The Player
 		void renderTile(int x,int y);						//Render Tiles
@@ -107,10 +118,12 @@ class Display{
 
 		int getBoardSize();						//Get board size
 
-		void swapColors(						//Swap Tile Colors
-					int x1,int y1,				//The x and y position of tile one
-					int x2,int y2				//The x and y position of tile two
+		void swapColorsKeyboard(						//Swap Tile Colors
+					int x1,int y1,				//The x and y position of tile
+					int num
 					);
+
+		void swapColorsMouse();
 
 		Tiles* getTileFromTiles(int i,int j);	//Get the pointer a tile in the Board
 

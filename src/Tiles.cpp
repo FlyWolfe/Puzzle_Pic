@@ -1,5 +1,7 @@
 #include "Tiles.h"
 
+#include <iostream>
+
 
 SDL_Color BLACK = {0,0,0,255};        //Color BLACK
 SDL_Color WHITE = {255,255,255,255};  //Color WHITE
@@ -46,6 +48,12 @@ void Tiles::setBox(SDL_Rect newBox){
 //Get box Box
 SDL_Rect Tiles::getBox(){
 	return this->box;
+}
+
+void Tiles::printTile(){
+	std::cerr << "TILE: " << std::endl;
+	std::cerr << "Tile Color: " << " r: " << (int)color.r << " g: " << (int)color.g << " b: " << (int)color.b << " a: " << (int)color.a << std::endl;
+	std::cerr << "Tile Box: " << " x: " << box.x <<  " y: " << box.y << " w: " << box.w << " h: " << box.h << std::endl;
 }
 
 
