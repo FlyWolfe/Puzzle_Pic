@@ -12,6 +12,7 @@
 #endif
 
 #include <string>
+#include <iostream>
 
 /*
 	PLAYER CLASS
@@ -54,6 +55,8 @@ class Player{
 		void click();
 
 		int getClicks();
+
+		void printBox();
 
 		//void renderPlayer(SDL_Renderer renderer);
 };

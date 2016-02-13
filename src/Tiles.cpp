@@ -50,6 +50,10 @@ SDL_Rect Tiles::getBox(){
 	return this->box;
 }
 
+std::string Tiles::getName(){
+	return this->name;
+}
+
 void Tiles::printTile(){
 	std::cerr << "TILE: " << std::endl;
 	std::cerr << "Tile Color: " << " r: " << (int)color.r << " g: " << (int)color.g << " b: " << (int)color.b << " a: " << (int)color.a << std::endl;

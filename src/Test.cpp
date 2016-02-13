@@ -17,6 +17,9 @@ int main(int argc, char *argv[]){
     SDL_Rect r = {0,0,display.getBwidth(),display.getBheight()};
     Player player = Player(r);
     display.render(player.getBox());
+
+    player.printBox();
+
     SDL_Event e;
     while(true){
         while(SDL_PollEvent(&e)!=0){
@@ -75,6 +78,8 @@ int main(int argc, char *argv[]){
                         break;
                         case SDLK_p:   //Print Board For Debugging Purposes
                             display.printBoard();
+                            std::cerr << std::endl;
+                            player.printBox();
                         break;
                         default:
                             std::cerr << "NO VALID KEY PRESSES!" << std::endl;

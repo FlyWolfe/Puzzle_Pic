@@ -97,3 +97,7 @@ void Player::switchSwap(){
 bool Player::getSwap(){
 	return this->swap;
 }
+
+void Player::printBox(){
+	std::cerr << " Name: " << this->name << " x: " << this->box.x << " y: " << this->box.y << " width: " << this->box.w << " height: " << this->box.h << std::endl;
+}

@@ -28,8 +28,13 @@ Display::Display(std::string name,int initialPosX,int initialPosY,int newWidth,i
 	createRGBSurface();											//Create Surface from RGB pixel Encoding
 	textureFromSurface();										//Create Texture from Surface
 
+	std::vector<std::pair<int,int > > vec;
+	vec.push_back(std::make_pair(0,1));
+	vec.push_back(std::make_pair(1,1));
+	vec.push_back(std::make_pair(2,2));
 
-	setPalette();												//Set the Palette of the Game Board
+	setPalette(vec);											//Set the Palette of the Game Board
+	printPalette();												
 
 	makeBoard();												//Make Game Board
 
@@ -58,7 +63,7 @@ void Display::initSDL(){
 }*/
 
 //Set the Palette of the Game Board
-void Display::setPalette(){
+void Display::setPalette(std::vector<std::pair<int ,int > > newpalette){
 
 	SDL_Color colors[] = {
 		{0,128,0,255}, //green
@@ -72,9 +77,49 @@ void Display::setPalette(){
 		{255,192,203,255} //pink
 	};
 
-	std::vector<SDL_Color> temp(colors, colors + sizeof(colors) / sizeof(SDL_Color) );
+	std::string name;
 
-	this->palette = temp;
+	std::vector<PaletteColors> palette;
+
+	for(int i=0; i < newpalette.size(); i++){
+		switch(newpalette[i].first){
+			case 0:
+				name="Green";
+			break;
+			case 1:
+				name="Orange";
+			break;
+			case 2:
+				name="Blue";
+			break;
+			case 3:
+				name="Red";
+			break;
+			case 4:
+				name="Yellow";
+			break;
+			case 5:
+				name="Violet";
+			break;
+			case 6:
+				name="White";
+			break;
+			case 7:
+				name="Purple";
+			break;
+			case 8:
+				name="Pink";
+			break;
+			default:
+			std::cerr << "NOT A VALID COLOR" << std::endl;
+			break;
+		}
+		palette.push_back(PaletteColors(colors[newpalette[i].first],newpalette[i].second,name));
+	}
+
+	//std::vector<SDL_Color> temp(colors, colors + sizeof(colors) / sizeof(SDL_Color) );
+
+	this->palette = palette;
 
 }
 
@@ -82,12 +127,12 @@ void Display::setPalette(){
 void Display::printPalette(){
 	std::cerr << "PRINT PALETTE" << std::endl;
 	for(int i=0;(unsigned)i<palette.size();i++){
-		std::cerr << "Palette: " << " num: " << i << " r: " << (int)palette[i].r << " g: " << (int)palette[i].g << " b: " << (int)palette[i].b << " a: " << (int)palette[i].a << std::endl;
+		std::cerr << "Palette: " << " num: " << i << " Name : " << palette[i].name << " Amount: " << palette[i].numofColor << " r: " << (int)palette[i].color.r << " g: " << (int)palette[i].color.g << " b: " << (int)palette[i].color.b << " a: " << (int)palette[i].color.a << std::endl;
 	}
 }
 
 //Get Palette of a Display
-std::vector<SDL_Color> Display::getPalette(){
+std::vector<PaletteColors> Display::getPalette(){
 	return this->palette;
 }
 
@@ -191,7 +236,7 @@ void Display::createRenderer(){
 void Display::setupRenderer(){
 
 	// Set size of renderer to the same as windows
-	SDL_RenderSetLogicalSize(this->renderer, width, height);
+	SDL_RenderSetLogicalSize(this->renderer, this->width, this->height);
 
 	// Set color of renderer clear to black
 	SDL_SetRenderDrawColor(this->renderer, 0, 0, 0, 255 );
@@ -247,9 +292,15 @@ void Display::makeBoard(){
 		for(int j=0,h=0;j<boardSize;j++,h+=bheight){
 			//std::cerr << "Tile Created :" << "i: " << i << " j: " << j << std::endl;
 			temp.y=h;
-			num=dist(engine);
-			//std::cerr << "Tile Color :" << "num: " << num << " r: " << (int)this->palette[num].r << " g: " << (int)palette[num].g << " b: " << (int)palette[num].b << " a: " << (int)palette[num].a << std::endl;
-			tiles[i].push_back(Tiles(this->palette[num],temp));
+			do{
+				num=dist(engine);
+				//std::cerr << "Tile Color :" << "num: " << num << " r: " << (int)this->palette[num].r << " g: " << (int)palette[num].g << " b: " << (int)palette[num].b << " a: " << (int)palette[num].a << std::endl;
+				//if(this->palette[num].numofColor!=0){
+				//	break;
+				//}
+			}while(this->palette[num].numofColor==0);
+				tiles[i].push_back(Tiles(this->palette[num].color,temp));
+				this->palette[num].numofColor--;
 		}
 	}
 }
@@ -349,8 +400,8 @@ void Display::render(SDL_Rect box){
 //Close Display
 void Display::close(){
 
-	free(clickedTiles[0]);
-	free(clickedTiles[1]);
+	//free(clickedTiles[0]);
+	//free(clickedTiles[1]);
 
 	deleteClickedTiles();
 

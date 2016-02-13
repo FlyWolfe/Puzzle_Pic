@@ -14,6 +14,7 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <utility>
 
 #include "Tiles.h"
 
@@ -22,6 +23,20 @@ enum {
 	DOWN,
 	LEFT,
 	RIGHT
+};
+
+struct PaletteColors{
+
+	SDL_Color color;
+	int numofColor;
+	std::string name;
+
+	PaletteColors(){}
+	PaletteColors(SDL_Color c,int num, std::string n){
+		color=c;
+		numofColor=num;
+		name=n;
+	}
 };
 
 
@@ -36,7 +51,7 @@ class Display{
 		SDL_Surface* surface;
 		SDL_Window* windows;
 
-		std::vector<SDL_Color> palette; //Colors in the Game
+		std::vector<PaletteColors> palette; //Colors in the Game
 
 		int width;						//Width of Display Window
 		int height;						//Height of Display Window
@@ -63,8 +78,10 @@ class Display{
 		void initSDL();							//Initialize SDL
 		void initTTF();							//Initialize TTF
 
-		void setPalette();						//Create the Colors of the Display
-		std::vector<SDL_Color> getPalette();	//Get the Colors of the Display
+		void setPalette(						//Create the Colors of the Display
+				std::vector<std::pair<int,int> >
+				);						
+		std::vector<PaletteColors> getPalette();	//Get the Colors of the Display
 		void printPalette();					//Print the Colors for debbuging purposes
 
 		void loadTexture();						//Load Textrues From file

@@ -11,6 +11,8 @@
 //#include <SDL2/SDL_ttf.h>
 #endif
 
+#include <string>
+
 /*
 	Tiles CLASS
 *********************/ 
@@ -19,7 +21,8 @@ class Tiles{
 
 	private:
 		SDL_Color color;					//Color of a box
-		SDL_Rect box; 						//Rectange Box of a box
+		SDL_Rect box; 						//Rectangle Box of a box
+		std::string name;						
 
 	public:
 		Tiles();							//Empty Constructor of a box
@@ -34,6 +37,9 @@ class Tiles{
 
 		void setBox(SDL_Rect newBox);		//Set the Rectangle Box of a box 
 		SDL_Rect getBox();					//Get the Rectangle Box of a box
+
+
+		std::string getName();
 
 		void printTile();
 
