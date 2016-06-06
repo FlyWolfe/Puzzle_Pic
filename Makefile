@@ -2,7 +2,7 @@
 
 SHELL  = bash
 TARGET = PuzzlePic
-CC     = g++
+CC     = clang++
 SDL2 = sdl2
 SDL2_IMAGE = SDL2_image
 SDL2_TTF = SDL2_ttf
@@ -11,10 +11,10 @@ SDL2_TTF = SDL2_ttf
 CCFL := -c -g -Wall `pkg-config --cflags $(SDL2) $(SDL2_IMAGE) $(SDL2_TTF)`
 LDFL := -Wall `pkg-config --libs $(SDL2) $(SDL2_IMAGE) $(SDL2_TTF)`
 
-# List of source files. 
+# List of source files.
 #SRCS := main.cpp
 
-SRCS := Tiles.cpp Player.cpp Display.cpp Test.cpp 
+SRCS := Tiles.cpp Player.cpp Game.cpp Display.cpp Board.cpp Test.cpp
 
 # Construct file lists
 OBJS := $(addprefix build/obj/,$(patsubst %.cpp,%.o,$(SRCS)))
@@ -22,9 +22,9 @@ DEPS := $(addprefix build/dep/,$(patsubst %.cpp,%.d,$(SRCS)))
 SRCS := $(addprefix src/,$(SRCS))
 
 # All the make rules
-.PHONY: all clean 
+.PHONY: all clean
 
-all: $(TARGET) 
+all: $(TARGET)
 
 $(TARGET): $(OBJS)
 	$(CC) $(OBJS) $(LDFL) -o $(TARGET)
@@ -40,4 +40,4 @@ clean:
 	rm -f $(TARGET)
 
 # Include automagically generated dependencies
--include $(DEPS) 
+-include $(DEPS)

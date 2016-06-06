@@ -1,49 +1,31 @@
 #ifndef _GAME_H_
 #define _GAME_H_
 
-#include <vector>
+#include <string>
 
+#include "Display.h"
 #include "Player.h"
-#include "Tiles.h"
-
-
 
 class Game{
 	private:
 
+		Display display;
 		Player player;
-		std::vector<std::vector<Tiles> > tiles;
-
-		int boardSize;
-
-		int bwidth,bheight;
-
+		bool playGame;
 		int numOfSwaps;
-		bool swap;
 
 	public:
 
-		Game(int size,int w,int h,int newbwidth,int newbheight);
+		Game();
+		Game(std::string name,int size,int width,int height);
 
-		void swapColors(Tiles tile1,Tiles tile2);
+		void incrementNumSwaps();
+		int getIncrementNumSwaps();
 
-		void incrementSwaps();
-		int getNumSwaps();
+		void updateDisplay();
+		void controls();
 
-		void switchSwap();
-		bool getSwap();
-
-		void makeBoard(int bwidth,int bheight);
-
-		bool checkCollision(int posx,int posy,int width, int height);
-
-		//void renderBoard(SDL_Renderer renderer);
-
-		Player getPlayer();
-
-		Tiles getTileFromTiles(int i,int j);
-		Tiles getTiles();
-
+		bool getPlayGame();
 };
 
 #endif

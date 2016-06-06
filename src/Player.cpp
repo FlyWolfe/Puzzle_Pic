@@ -3,18 +3,22 @@
 
 /*
 	PLAYER CLASS FUNCTION DEFINITIONS
-*********************/ 
+*********************/
 
 //Constructor of Player CLass
-Player::Player(SDL_Rect newBox){
+
+Player::Player(){}
+
+Player::Player(SDL_Rect newBox, int boundary){
 	name="DEATH";
 	box = newBox;
 	swap=false;
+	this->boundary = boundary;
 }
 
 //Set Player Name
 void Player::setName(std::string newName){
-	name=newName;
+	this->name=newName;
 }
 
 //Get Player Name
@@ -24,7 +28,7 @@ std::string Player::getName(){
 
 //Set Player Box
 void Player::setBox(SDL_Rect newBox){
-	box=newBox;
+	this->box=newBox;
 }
 
 //Get Player Box
@@ -48,32 +52,55 @@ int Player::getPosy(){
 	return this->box.y;
 }
 
-bool Player::moveUP(int check){
-	if((box.y-box.h) > check-1){
+bool Player::moveUP(){
+/*	if((box.y-box.h) >= check){
+		box.y-=box.h;
+		return true;
+	}
+	return false;*/
+	if((box.y/box.h)%boundary > 0){
 		box.y-=box.h;
 		return true;
 	}
 	return false;
 }
 
-bool Player::moveDOWN(int check){
-	if((box.y+box.h) < check-1){
+bool Player::moveDOWN(){
+	/*if((box.h+box.y) < (check-box.h)){
+		box.y+=box.h;
+		return true;
+	}
+	return false;*/
+
+	if((box.y/box.h)%boundary < boundary-1){
 		box.y+=box.h;
 		return true;
 	}
 	return false;
 }
 
-bool Player::moveRIGHT(int check){
-	if((box.x+box.w) < check-1){
+bool Player::moveRIGHT(){
+	/*if((box.w+box.x) < (check-box.w)){
+		box.x+=box.w;
+		return true;
+	}
+	return false;*/
+
+	if((box.x/box.w)%boundary < boundary-1){
 		box.x+=box.w;
 		return true;
 	}
 	return false;
 }
 
-bool Player::moveLEFT(int check){
-	if((box.x-box.w) > check-1){
+bool Player::moveLEFT(){
+	/*if((box.x-box.w) >= check){
+		box.x-=box.w;
+		return true;
+	}
+	return false;*/
+
+	if((box.x/box.w)%boundary > 0){
 		box.x-=box.w;
 		return true;
 	}

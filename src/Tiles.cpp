@@ -11,7 +11,7 @@ SDL_Color WHITE = {255,255,255,255};  //Color WHITE
 *********************/
 
 
-//Empty Constructor 
+//Empty Constructor
 Tiles::Tiles(){
 	this->color = WHITE;
 }
@@ -29,7 +29,7 @@ Tiles::~Tiles(){
 }
 */
 
-//Set Color 
+//Set Color
 void Tiles::setColor(SDL_Color newColor){
 	//std::cerr << "SET COLOR" << std::endl;
 	this->color = newColor;
@@ -59,6 +59,3 @@ void Tiles::printTile(){
 	std::cerr << "Tile Color: " << " r: " << (int)color.r << " g: " << (int)color.g << " b: " << (int)color.b << " a: " << (int)color.a << std::endl;
 	std::cerr << "Tile Box: " << " x: " << box.x <<  " y: " << box.y << " w: " << box.w << " h: " << box.h << std::endl;
 }
-
-
-

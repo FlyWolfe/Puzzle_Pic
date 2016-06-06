@@ -24,10 +24,11 @@ class Player{
 		SDL_Rect box;				//Box of Player
 		bool swap;					//Bool fo knowing When to Swap tiles
 		int clicks;
+		int boundary;
 
 	public:
 		Player();					//Empty Constructor
-		Player(SDL_Rect newBox);	//Constructor Player from SDL_Rect box
+		Player(SDL_Rect newBox,int boundary);	//Constructor Player from SDL_Rect box
 
 		void setName(				//Set Name of Player
 				std::string newName	//Name of Player
@@ -44,10 +45,10 @@ class Player{
 		int getPosx();				//Get X Position of the Player
 		int getPosy();				//Get Y Position of the Player
 
-		bool moveUP(int moveNum);
-		bool moveDOWN(int moveNum);
-		bool moveRIGHT(int moveNum);
-		bool moveLEFT(int moveNum);
+		bool moveUP();
+		bool moveDOWN();
+		bool moveRIGHT();
+		bool moveLEFT();
 
 		void switchSwap();			//Toggle the Boolean for swapping Tiles
 		bool getSwap();				//Get Swap Boolean
